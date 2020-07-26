@@ -77,6 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Stack(
+              fit: StackFit.expand,
               children: <Widget>[
                 Container(
                     height: mHeight(context: context, height: 243.2),
