@@ -1,10 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_trip_challenger/utils/hex_color.dart';
 import 'package:flutter_trip_challenger/utils/support_device.dart';
 import 'package:flutter_trip_challenger/utils/widgets/text_field_with_icon.dart';
-
 
 class RegisterPage extends StatefulWidget {
   RegisterPage({Key key, this.title}) : super(key: key);
@@ -88,7 +89,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         Container(
                           width: mWidth(context: context, width: 330),
-                          padding: EdgeInsets.symmetric( vertical: 10, horizontal: 10),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
                           child: Column(
 //                            mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
@@ -99,54 +101,61 @@ class _RegisterPageState extends State<RegisterPage> {
                               textFieldWithIcon('Password', true, password,
                                   Icon(Icons.lock_outline)),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Expanded(
-                                    child: textFieldWithIcon('Height', false, height,
-                                        Icon(Icons.lock_outline)),
+                                    child: textFieldWithIcon('Height', false,
+                                        height, Icon(Icons.lock_outline)),
                                   ),
                                   SizedBox(width: 50),
                                   Expanded(
-                                    child: textFieldWithIcon('Weight', false, weight,
-                                        Icon(Icons.lock_outline)),
+                                    child: textFieldWithIcon('Weight', false,
+                                        weight, Icon(Icons.lock_outline)),
                                   ),
                                 ],
                               ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Expanded(
                                     child: GestureDetector(
-                                      onTap: () {
-                                        DatePicker.showDatePicker(context,
-                                            showTitleActions: true,
-                                            onChanged: (date) {
-                                              print('change $date');
-                                            },
-                                            theme: DatePickerTheme(
-                                              backgroundColor: HexColor('#FEDCA4')
-                                            ),
-                                            onConfirm: (date) {
+                                        onTap: () {
+                                          DatePicker.showDatePicker(context,
+                                              showTitleActions: true,
+                                              onChanged: (date) {
+                                                print('change $date');
+                                              },
+                                              theme: DatePickerTheme(
+                                                  backgroundColor:
+                                                      HexColor('#FEDCA4')),
+                                              onConfirm: (date) {
 //                                              calendar.text = date.toString();
-                                              setState(() {
-                                                dateOfBirth = date.toString().substring(0,10);
-                                              });
-                                            },
-                                            locale: LocaleType.en);
-                                      },
-                                      child: Column(
-                                        children: <Widget>[
-                                          Text('Date of birth'),
-                                          Row(
-                                            children: <Widget>[
-                                              Icon(Icons.calendar_today),
-                                              SizedBox(width: 20),
-                                              Text(dateOfBirth != null ? '$dateOfBirth' : 'Date of birth', )
-                                            ],
-                                          ),
-                                        ],
-                                      )
-                                    ),
+                                                setState(() {
+                                                  dateOfBirth = date
+                                                      .toString()
+                                                      .substring(0, 10);
+                                                });
+                                              },
+                                              locale: LocaleType.en);
+                                        },
+                                        child: Column(
+                                          children: <Widget>[
+                                            Text('Date of birth'),
+                                            Row(
+                                              children: <Widget>[
+                                                Icon(Icons.calendar_today),
+                                                SizedBox(width: 20),
+                                                Text(
+                                                  dateOfBirth != null
+                                                      ? '$dateOfBirth'
+                                                      : 'Date of birth',
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        )),
                                   ),
                                   SizedBox(width: 15),
                                   Expanded(
@@ -158,13 +167,16 @@ class _RegisterPageState extends State<RegisterPage> {
                                               focusColor: HexColor('#FEC151'),
                                               value: GenderCharacter.male,
                                               groupValue: _character,
-                                              onChanged: (GenderCharacter value) {
+                                              onChanged:
+                                                  (GenderCharacter value) {
                                                 setState(() {
                                                   _character = value;
                                                 });
                                               },
                                             ),
-                                            Padding(padding: EdgeInsets.only(left: 0.0)),
+                                            Padding(
+                                                padding:
+                                                    EdgeInsets.only(left: 0.0)),
                                             Text('Male'),
                                           ],
                                         ),
@@ -174,13 +186,16 @@ class _RegisterPageState extends State<RegisterPage> {
                                               focusColor: HexColor('#FEC151'),
                                               value: GenderCharacter.female,
                                               groupValue: _character,
-                                              onChanged: (GenderCharacter value) {
+                                              onChanged:
+                                                  (GenderCharacter value) {
                                                 setState(() {
                                                   _character = value;
                                                 });
                                               },
                                             ),
-                                            Padding(padding: EdgeInsets.only(left: 0.0)),
+                                            Padding(
+                                                padding:
+                                                    EdgeInsets.only(left: 0.0)),
                                             Text('Female'),
                                           ],
                                         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_trip_challenger/home.dart';
 import 'package:flutter_trip_challenger/register.dart';
 import 'package:flutter_trip_challenger/utils/hex_color.dart';
 import 'package:flutter_trip_challenger/utils/support_device.dart';
@@ -150,7 +151,12 @@ class _LoginPageState extends State<LoginPage> {
                 InkWell(
                   highlightColor: Colors.white,
                   radius: 0,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                    );
+                  },
                   child: button(context: context, text: 'Login'),
                 ),
                 Padding(
