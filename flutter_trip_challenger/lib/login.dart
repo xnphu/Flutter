@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_trip_challenger/register.dart';
+import 'package:flutter_trip_challenger/utils/hex_color.dart';
 import 'package:flutter_trip_challenger/utils/support_device.dart';
+import 'package:flutter_trip_challenger/utils/widgets/orange_button.dart';
+import 'package:flutter_trip_challenger/utils/widgets/text_field_with_icon.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.title}) : super(key: key);
@@ -25,6 +29,7 @@ class _LoginPageState extends State<LoginPage> {
         child: SafeArea(
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 15),
+            height: MediaQuery.of(context).size.height,
             child: Column(
               children: <Widget>[
                 SizedBox(height: mHeight(context: context, height: 15)),
@@ -35,6 +40,8 @@ class _LoginPageState extends State<LoginPage> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
                         InkWell(
+                          highlightColor: Colors.white,
+                          radius: 0,
                           onTap: () {
                             setState(() {
                               isOpen = !isOpen;
@@ -44,7 +51,13 @@ class _LoginPageState extends State<LoginPage> {
                             width: mWidth(context: context, width: 50),
                             height: mHeight(context: context, height: 30),
                             decoration: BoxDecoration(
-                              color: Colors.orange,
+                              gradient: LinearGradient(
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                  colors: [
+                                    HexColor('#FFC555'),
+                                    HexColor('#F49220')
+                                  ]),
                               borderRadius: BorderRadius.circular(
                                   mHeight(context: context, height: 15)),
                             ),
@@ -56,7 +69,8 @@ class _LoginPageState extends State<LoginPage> {
                                   image: AssetImage('assets/images/round.png'),
                                   fit: BoxFit.cover,
                                 ),
-                                SizedBox(width: mWidth(context: context, width: 5)),
+                                SizedBox(
+                                    width: mWidth(context: context, width: 5)),
                                 Text(
                                   'EN',
                                   style: TextStyle(
@@ -72,10 +86,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ],
                 ),
-//                Container(
-//
-//                  child: languageMenu(isOpen),
-//                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
@@ -90,42 +100,77 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ],
                 ),
-                Stack(
-//                  fit: StackFit.expand,
-                  alignment: Alignment.center,
-                  overflow: Overflow.clip,
-                  children: <Widget>[
-                    Image(
-                      image: AssetImage(
-                          'assets/images/input-field-background.png'),
-                      fit: BoxFit.cover,
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                  child: Container(
+                    width: mWidth(context: context, width: 335),
+                    height: mHeight(context: context, height: 310),
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                            color:
+                                Color.fromARGB((0.25 * 255).toInt(), 0, 0, 0),
+                            offset: Offset(0, 4),
+                            blurRadius: 4)
+                      ],
+                      gradient: LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: [HexColor('#FFE2AA'), HexColor('#FDD9A1')]),
+                      borderRadius: BorderRadius.circular(26),
                     ),
-                    Image(
-                      color: Colors.grey,
-                      image: AssetImage('assets/images/flash.png'),
-                      fit: BoxFit.cover,
-                    ),
-                    Column(
+                    child: Stack(
+                      alignment: Alignment.center,
                       children: <Widget>[
-                        _textField('Email address', false, email,
-                            Icon(Icons.mail_outline)),
-                        _textField('Password', true, password,
-                            Icon(Icons.lock_outline)),
+                        Positioned(
+                          bottom: 5,
+                          child: Image(
+                            image: AssetImage('assets/images/flash-grey.png'),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Container(
+                          width: mWidth(context: context, width: 330),
+                          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              textFieldWithIcon('Email address', false, email,
+                                  Icon(Icons.mail_outline)),
+                              textFieldWithIcon('Password', true, password,
+                                  Icon(Icons.lock_outline)),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
-                button('LOGIN'),
+                InkWell(
+                  highlightColor: Colors.white,
+                  radius: 0,
+                  onTap: () {},
+                  child: button(context: context, text: 'Login'),
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Text(
                     'Forgot password?',
-                    style: TextStyle(
-                      decoration: TextDecoration.underline
-                    ),
+                    style: TextStyle(decoration: TextDecoration.underline),
                   ),
                 ),
-                button('REGISTER'),
+                InkWell(
+                  highlightColor: Colors.white,
+                  radius: 0,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => RegisterPage()),
+                    );
+                  },
+                  child: button(context: context, text: 'Register'),
+                ),
               ],
             ),
           ),
@@ -133,73 +178,16 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-}
 
-_textField(String placeholder, bool isObscureText,
-    TextEditingController controller, Icon icon) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-    child: TextField(
-      controller: controller,
-      obscureText: isObscureText,
-      decoration: InputDecoration(
-        border: UnderlineInputBorder(),
-        labelText: placeholder,
-        prefixIcon: icon,
-      ),
-    ),
-  );
-}
-languageMenu (bool isOpen) {
-    if(isOpen == true){
+  languageMenu(bool isOpen) {
+    if (isOpen == true) {
       return Image(
-        image: AssetImage(
-            'assets/images/language-menu.png'),
+        image: AssetImage('assets/images/language-menu.png'),
         fit: BoxFit.cover,
       );
-    }
-    else return SizedBox(height: 0,);
-}
-
-button(String text) {
-  return InkWell(
-    onTap: () {},
-    child: Container(
-      child: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          Image(
-            image: AssetImage('assets/images/orange-button.png'),
-            fit: BoxFit.cover,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Text(
-                text,
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Image(
-                    image: AssetImage(
-                        'assets/images/arrow-grey.png'),
-                    fit: BoxFit.cover,
-                  ),
-                  Image(
-                    image: AssetImage(
-                        'assets/images/arrow-white.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
-    ),
-  );
+    } else
+      return SizedBox(
+        height: 0,
+      );
+  }
 }
