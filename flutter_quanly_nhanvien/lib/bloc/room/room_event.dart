@@ -38,17 +38,16 @@ class RoomDeletedEvent extends RoomEvent {
 }
 
 class AddOfficerToRoomEvent extends RoomEvent {
-  final int roomId;
-  final String maNhanVien;
-  final String tenNhanVien;
+  final int roomIndex;
+  final Officer officer;
 
-  AddOfficerToRoomEvent({this.roomId, this.maNhanVien, this.tenNhanVien});
+  AddOfficerToRoomEvent(this.roomIndex, this.officer);
 
   @override
   // TODO: implement props
-  List<Object> get props => [roomId, maNhanVien, tenNhanVien];
+  List<Object> get props => [roomIndex, officer];
 
   @override
   String toString() =>
-      'Added officer { id: $maNhanVien, name: $tenNhanVien } to roomId $roomId }';
+      'Added officer { $officer } to roomIndex: $roomIndex';
 }

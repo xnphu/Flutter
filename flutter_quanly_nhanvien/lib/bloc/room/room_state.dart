@@ -16,7 +16,7 @@ class RoomLoadInProgressState extends RoomState {}
 class RoomLoadSuccessState extends RoomState {
   final List<Room> rooms;
 
-  RoomLoadSuccessState({this.rooms});
+  RoomLoadSuccessState({this.rooms}) : super();
 
   @override
   // TODO: implement props

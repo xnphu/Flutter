@@ -6,6 +6,11 @@ class Room extends Equatable {
   final String name;
   final List<Officer> officerList;
 
+  Room copyWith({String id, String name, List<Officer> officerList}) => Room(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      officerList: officerList ?? this.officerList);
+
   Room({this.id, this.name, this.officerList});
 
   Room.fromJson(Map<String, dynamic> json)
@@ -13,8 +18,7 @@ class Room extends Equatable {
         name = json['name'],
         officerList = json['officerList'];
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         'id': id,
         'name': name,
         'officerList': officerList,

@@ -12,7 +12,9 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
   final _mnv = BehaviorSubject<String>();
   final _tnv = BehaviorSubject<String>();
 
-  disPose(){
+  disPose() {
+    _mpb.close();
+    _tpb.close();
     _tnv.close();
     _mnv.close();
   }
@@ -33,15 +35,13 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
 
   Function(String) get changeTnv => _tnv.sink.add;
 
-  Stream<bool> validInput;
-  Stream<bool> validAddOfficerInput;
+  Stream<bool> get validInput => Rx.combineLatest2(mpbStream, tpbStream,
+      (a, b) => a.toString().isNotEmpty && b.toString().isNotEmpty);
 
-  RoomBloc() : super(RoomInitialState()) {
-    validInput = Rx.combineLatest2(mpbStream, tpbStream,
-        (a, b) => a.toString().isNotEmpty && b.toString().isNotEmpty);
-    validAddOfficerInput = Rx.combineLatest2(mnvStream, tnvStream,
-            (a, b) => a.toString().isNotEmpty && b.toString().isNotEmpty);
-  }
+  Stream<bool> get validAddOfficerInput => Rx.combineLatest2(mnvStream,
+      tnvStream, (c, d) => c.toString().isNotEmpty && d.toString().isNotEmpty);
+
+  RoomBloc() : super(RoomInitialState());
 
   @override
   Stream<RoomState> mapEventToState(RoomEvent event) async* {
@@ -62,14 +62,26 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
       yield RoomLoadSuccessState(rooms: rooms);
     }
     if (event is AddOfficerToRoomEvent) {
-      print('event: ${event.roomId}');
-      print('event: ${event.maNhanVien}');
-      print('event: ${event.tenNhanVien}');
-      yield RoomLoadInProgressState();
-      await Future.delayed(Duration(seconds: 2));
-//      rooms[event.roomId].officerList.add(event.officer);
+      print('event: $event');
+//      yield RoomLoadInProgressState();
+//      await Future.delayed(Duration(seconds: 2));
+      Room room = rooms[event.roomIndex];
+
+      List<Officer> list = room.officerList;
+      if (list == null) {
+        list = [];
+      }
+      list.add(event.officer);
+
+      list.forEach((element) {
+        print('element: ${element.name}');
+      });
+
+      Room r = rooms[event.roomIndex].copyWith(officerList: list);
+      rooms[event.roomIndex] = r;
 
       yield RoomLoadSuccessState(rooms: rooms);
+      print('rooms: ${rooms[event.roomIndex].officerList}');
     }
   }
 }
