@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quanly_nhanvien/bloc/room/room_bloc.dart';
 import 'package:flutter_quanly_nhanvien/bloc/room/room_event.dart';
 import 'package:flutter_quanly_nhanvien/bloc/room/room_state.dart';
+import 'package:flutter_quanly_nhanvien/room_detail.dart';
 import 'package:flutter_quanly_nhanvien/utils/widgets/add_officer_dialog_content.dart';
+import 'package:flutter_quanly_nhanvien/utils/widgets/dialog_content.dart';
 import 'package:flutter_quanly_nhanvien/utils/widgets/text_field.dart';
 
 import 'models/models.dart';
@@ -50,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _bloc = BlocProvider.of<RoomBloc>(context);
   }
 
-@override
+  @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
@@ -144,7 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: Stack(
                           children: <Widget>[
                             Container(
-                              child: new ListView.builder(
+                              child: ListView.builder(
                                   itemCount: _list?.length ?? 0,
                                   itemBuilder:
                                       (BuildContext context, int index) {
@@ -179,7 +181,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                             3,
                                                     child: Column(
                                                       children: <Widget>[
-                                                        _dialogContent(
+                                                        dialogContent(
                                                             onTap: () {
                                                               print('add nv');
                                                               showDialog(
@@ -189,15 +191,36 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                       (BuildContext
                                                                           context) {
                                                                     return AddOfficerDialogContent(
-                                                                        roomIndex:
-                                                                            index, roomBloc: _bloc,);
+                                                                      roomIndex:
+                                                                          index,
+                                                                      roomBloc:
+                                                                          _bloc,
+                                                                    );
                                                                   });
                                                             },
                                                             icon:
                                                                 Icon(Icons.add),
                                                             title:
                                                                 'Them nhan vien'),
-                                                        _dialogContent(
+                                                        dialogContent(
+                                                            onTap: () async {
+                                                              Navigator.pop(context);
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder: (context) =>
+                                                                          RoomDetail(
+                                                                            roomIndex:
+                                                                                index,
+                                                                            officerList:
+                                                                                _list[index].officerList,
+                                                                          )));
+                                                            },
+                                                            icon: Icon(
+                                                                Icons.list),
+                                                            title:
+                                                                'Danh sach nhan vien'),
+                                                        dialogContent(
                                                             onTap: () {
                                                               _onTapDeleteRoom(
                                                                   index: index);
@@ -226,7 +249,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       );
 
-
                       return _list != null
                           ? _list.length > 0 ? list : Container()
                           : Container();
@@ -239,7 +261,6 @@ class _MyHomePageState extends State<MyHomePage> {
         ) // This trailing comma makes auto-formatting nicer for build methods.
         );
   }
-
 
   _listItemContent({String id, String roomName, List<Officer> officerList}) {
     return Column(
@@ -269,34 +290,4 @@ class _MyHomePageState extends State<MyHomePage> {
     _bloc.add(RoomDeletedEvent(index: index));
     Navigator.pop(context);
   }
-
-  _dialogContent({Function onTap, Icon icon, String title}) {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          InkWell(
-            highlightColor: Colors.white,
-            radius: 0,
-            onTap: () {
-              if (onTap != null) onTap();
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: <Widget>[
-                  icon,
-                  Text(title),
-                ],
-              ),
-            ),
-          ),
-          Divider(
-            height: 1,
-            color: Colors.black,
-          )
-        ],
-      ),
-    );
-  }
-
 }

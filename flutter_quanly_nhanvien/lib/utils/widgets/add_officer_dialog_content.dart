@@ -80,7 +80,6 @@ class _AddOfficerDialogContentState extends State<AddOfficerDialogContent> {
                           value: 'male',
                           groupValue: _gender,
                           onChanged: (value) {
-                            print('1 $value');
                             setState(() {
                               _gender = value;
                             });
@@ -96,7 +95,6 @@ class _AddOfficerDialogContentState extends State<AddOfficerDialogContent> {
                           value: 'female',
                           groupValue: _gender,
                           onChanged: (value) {
-                            print('2 $value');
                             setState(() {
                               _gender = value;
                             });
@@ -118,23 +116,20 @@ class _AddOfficerDialogContentState extends State<AddOfficerDialogContent> {
                       ? RaisedButton(
                           color: Colors.lightBlue,
                           onPressed: () {
-                            print('bloc ${widget.roomBloc}');
-                            print('aaaaa ${widget.roomIndex}');
-                            print(
-                                'bbbbbb ${maNVController.text}, ${tenNVController.text},');
-
                             widget.roomBloc.add(AddOfficerToRoomEvent(
-                                widget.roomIndex,
-                                Officer(
+                                roomIndex: widget.roomIndex,
+                                officer: Officer(
                                   id: maNVController.text,
                                   name: tenNVController.text,
+                                  gender: _gender,
                                   roomId: (widget.roomIndex).toString(),
                                 )));
-                                tenNVController.clear();
-                                maNVController.clear();
-                                widget.roomBloc.changeMpb("");
-                                widget.roomBloc.changeTpb("");
-                            FocusScope.of(context).unfocus();
+                            tenNVController.clear();
+                            maNVController.clear();
+                            widget.roomBloc.changeMpb("");
+                            widget.roomBloc.changeTpb("");
+//                            FocusScope.of(context).unfocus();
+                            Navigator.pop(context);
                             Navigator.pop(context);
                           },
                           child: Text('Luu nhan vien'),

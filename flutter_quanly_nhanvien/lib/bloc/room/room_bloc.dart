@@ -72,16 +72,31 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
         list = [];
       }
       list.add(event.officer);
-
-      list.forEach((element) {
-        print('element: ${element.name}');
-      });
-
+      //clone ra 1 room khac
       Room r = rooms[event.roomIndex].copyWith(officerList: list);
       rooms[event.roomIndex] = r;
 
       yield RoomLoadSuccessState(rooms: rooms);
-      print('rooms: ${rooms[event.roomIndex].officerList}');
+    }
+
+    if (event is DeleteOfficerFromRoomEvent) {
+      yield RoomLoadInProgressState();
+      await Future.delayed(Duration(seconds: 2));
+      Room room = rooms[event.roomIndex];
+      print('event $event');
+      List<Officer> officerList = room.officerList;
+      if (officerList != null) {
+        for (int index = 0; index < officerList.length; index++) {
+          if (officerList[index].id == event.officer.id) {
+            officerList.removeAt(index);
+            break;
+          }
+        }
+        Room r = rooms[event.roomIndex].copyWith(officerList: officerList);
+        rooms[event.roomIndex] = r;
+      }
+
+      yield RoomLoadSuccessState(rooms: rooms);
     }
   }
 }
