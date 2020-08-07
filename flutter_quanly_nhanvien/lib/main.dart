@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quanly_nhanvien/bloc/room/room_bloc.dart';
 import 'package:flutter_quanly_nhanvien/bloc/room/room_event.dart';
 import 'package:flutter_quanly_nhanvien/bloc/room/room_state.dart';
-import 'package:flutter_quanly_nhanvien/room_detail.dart';
+import 'file:///D:/Flutter-app/flutter_quanly_nhanvien/lib/bloc/detail_room/room_detail.dart';
 import 'package:flutter_quanly_nhanvien/utils/widgets/add_officer_dialog_content.dart';
 import 'package:flutter_quanly_nhanvien/utils/widgets/dialog_content.dart';
 import 'package:flutter_quanly_nhanvien/utils/widgets/text_field.dart';
@@ -205,7 +205,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                         dialogContent(
                                                             onTap: () async {
                                                               Navigator.pop(context);
-                                                              Navigator.push(
+                                                           var list = await   Navigator.push(
                                                                   context,
                                                                   MaterialPageRoute(
                                                                       builder: (context) =>
@@ -215,6 +215,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                             officerList:
                                                                                 _list[index].officerList,
                                                                           )));
+                                                           print('list back $list');
+                                                           if(list) {
+                                                             _list[index].copyWith(officerList: list);
+                                                           }
                                                             },
                                                             icon: Icon(
                                                                 Icons.list),

@@ -32,16 +32,14 @@ class DetailRoomBloc extends Bloc<DetailRoomEvent, DetailRoomState> {
   Stream<DetailRoomState> mapEventToState(DetailRoomEvent event) async* {
     // TODO: implement mapEventToState
     if (event is DetailRoomInitialEvent) {
-      yield DetailRoomLoadInProgressState();
-      await Future.delayed(Duration(seconds: 2));
-//      officers = event.officers;
+//      yield DetailRoomLoadInProgressState();
+      officers.addAll(List.from(event.officers));
+      yield DetailRoomLoadSuccessState(officers: officers);
     }
     if (event is DeleteOfficerEvent) {
-      yield DetailRoomLoadInProgressState();
       await Future.delayed(Duration(seconds: 2));
-
       officers.removeAt(event.index);
-
+      print('aaaaaaaaaaa ${officers.length}');
       yield DetailRoomLoadSuccessState(officers: officers);
     }
   }

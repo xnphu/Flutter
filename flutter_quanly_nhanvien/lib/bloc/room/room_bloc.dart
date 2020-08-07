@@ -53,6 +53,7 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
       rooms.add(event.room);
 
       yield RoomLoadSuccessState(rooms: rooms);
+      print('nnnnnn $rooms');
     }
     if (event is RoomDeletedEvent) {
       print('event: $event');
