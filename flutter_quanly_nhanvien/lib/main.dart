@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quanly_nhanvien/bloc/room/room_bloc.dart';
 import 'package:flutter_quanly_nhanvien/bloc/room/room_event.dart';
 import 'package:flutter_quanly_nhanvien/bloc/room/room_state.dart';
-import 'file:///D:/Flutter-app/flutter_quanly_nhanvien/lib/bloc/detail_room/room_detail.dart';
+import 'package:flutter_quanly_nhanvien/bloc/detail_room/room_detail.dart';
 import 'package:flutter_quanly_nhanvien/utils/widgets/add_officer_dialog_content.dart';
 import 'package:flutter_quanly_nhanvien/utils/widgets/dialog_content.dart';
 import 'package:flutter_quanly_nhanvien/utils/widgets/text_field.dart';
@@ -183,42 +183,19 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       children: <Widget>[
                                                         dialogContent(
                                                             onTap: () {
-                                                              print('add nv');
-                                                              showDialog(
-                                                                  context:
-                                                                      context,
-                                                                  builder:
-                                                                      (BuildContext
-                                                                          context) {
-                                                                    return AddOfficerDialogContent(
-                                                                      roomIndex:
-                                                                          index,
-                                                                      roomBloc:
-                                                                          _bloc,
-                                                                    );
-                                                                  });
+                                                              _onTapAddOfficer(
+                                                                  index: index);
                                                             },
                                                             icon:
                                                                 Icon(Icons.add),
                                                             title:
                                                                 'Them nhan vien'),
                                                         dialogContent(
-                                                            onTap: () async {
-                                                              Navigator.pop(context);
-                                                           var list = await   Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                      builder: (context) =>
-                                                                          RoomDetail(
-                                                                            roomIndex:
-                                                                                index,
-                                                                            officerList:
-                                                                                _list[index].officerList,
-                                                                          )));
-                                                           print('list back $list');
-                                                           if(list) {
-                                                             _list[index].copyWith(officerList: list);
-                                                           }
+                                                            onTap: () {
+                                                              _onTapShowOfficerList(
+                                                                  context:
+                                                                      context,
+                                                                  index: index);
                                                             },
                                                             icon: Icon(
                                                                 Icons.list),
@@ -271,14 +248,37 @@ class _MyHomePageState extends State<MyHomePage> {
       children: <Widget>[
         Container(
           padding: EdgeInsets.all(10),
-          child: Row(
+          child: Column(
             children: <Widget>[
-              Text(
-                'Ma phong: $id',
-                style: TextStyle(),
+              Row(
+                children: <Widget>[
+                  Text(
+                    'Ma phong: $id',
+                    style: TextStyle(),
+                  ),
+                  Text(', Ten phong: $roomName'),
+                  Text(
+                      ' (co: ${officerList != null ? officerList.length : 0} NV)'),
+                ],
               ),
-              Text(', Ten phong: $roomName'),
-              Text(' (co: ${officerList != null ? officerList.length : 0} NV)'),
+              Row(
+                children: <Widget>[
+                  Text('Truong phong: [Chua co]',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontStyle: FontStyle.italic,
+                          color: Colors.deepPurple)),
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Text('Pho phong: [Chua co]',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontStyle: FontStyle.italic,
+                          color: Colors.deepPurple)),
+                ],
+              ),
             ],
           ),
         ),
@@ -293,5 +293,32 @@ class _MyHomePageState extends State<MyHomePage> {
   _onTapDeleteRoom({int index}) {
     _bloc.add(RoomDeletedEvent(index: index));
     Navigator.pop(context);
+  }
+
+  _onTapAddOfficer({int index}) {
+    print('add nv');
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AddOfficerDialogContent(
+            roomIndex: index,
+            roomBloc: _bloc,
+          );
+        });
+  }
+
+  _onTapShowOfficerList({BuildContext context, int index}) async {
+    Navigator.pop(context);
+    List<Officer> listBack = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => RoomDetail(
+                  roomIndex: index,
+                  officerList: _list[index].officerList,
+                )));
+    print('list back $listBack');
+    if (listBack != null) {
+      _bloc.add(RoomModifyEvent(roomIndex: index, officerNewList: listBack));
+    }
   }
 }

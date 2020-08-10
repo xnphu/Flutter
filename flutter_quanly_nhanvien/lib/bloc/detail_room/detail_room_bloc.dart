@@ -7,24 +7,18 @@ import 'package:rxdart/rxdart.dart';
 
 class DetailRoomBloc extends Bloc<DetailRoomEvent, DetailRoomState> {
   final List<Officer> officers = [];
-  final _mnv = BehaviorSubject<String>();
   final _tnv = BehaviorSubject<String>();
 
   disPose() {
     _tnv.close();
-    _mnv.close();
   }
-
-  Stream<String> get mnvStream => _mnv.stream;
 
   Stream<String> get tnvStream => _tnv.stream;
 
-  Function(String) get changeMnv => _mnv.sink.add;
-
   Function(String) get changeTnv => _tnv.sink.add;
 
-  Stream<bool> get validAddOfficerInput => Rx.combineLatest2(mnvStream,
-      tnvStream, (c, d) => c.toString().isNotEmpty && d.toString().isNotEmpty);
+  Stream<bool> get validEditOfficerInput =>
+      Rx.combineLatest([tnvStream], (c) => c.toString().isNotEmpty);
 
   DetailRoomBloc() : super(DetailRoomInitialState());
 
@@ -37,9 +31,15 @@ class DetailRoomBloc extends Bloc<DetailRoomEvent, DetailRoomState> {
       yield DetailRoomLoadSuccessState(officers: officers);
     }
     if (event is DeleteOfficerEvent) {
-      await Future.delayed(Duration(seconds: 2));
+//      yield DetailRoomLoadInProgressState();
       officers.removeAt(event.index);
-      print('aaaaaaaaaaa ${officers.length}');
+      yield RemoveSuccessState(officers: officers);
+    }
+    if (event is EditOfficerEvent) {
+//      yield DetailRoomLoadInProgressState();
+      Officer officer = officers[event.index]
+          .copyWith(name: event.name, gender: event.gender);
+      officers[event.index] = officer;
       yield DetailRoomLoadSuccessState(officers: officers);
     }
   }

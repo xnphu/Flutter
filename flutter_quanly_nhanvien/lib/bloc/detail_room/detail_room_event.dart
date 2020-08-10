@@ -22,6 +22,21 @@ class DetailRoomInitialEvent extends DetailRoomEvent {
   String toString() => 'Detail room data initial with officers { $officers }';
 }
 
+class EditOfficerEvent extends DetailRoomEvent {
+  final int index;
+  final String name;
+  final String gender;
+
+  EditOfficerEvent({this.name, this.gender, this.index});
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [index, name, gender];
+
+  @override
+  String toString() => 'Edited officer at index: { $index }, name {$name}, gender {$gender}';
+}
+
 class DeleteOfficerEvent extends DetailRoomEvent {
   final int index;
 

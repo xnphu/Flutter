@@ -6,6 +6,9 @@ import 'package:flutter_quanly_nhanvien/bloc/detail_room/detail_room_event.dart'
 import 'package:flutter_quanly_nhanvien/bloc/detail_room/detail_room_state.dart';
 import 'package:flutter_quanly_nhanvien/bloc/room/room_bloc.dart';
 import 'package:flutter_quanly_nhanvien/models/models.dart';
+import 'package:flutter_quanly_nhanvien/utils/widgets/add_officer_dialog_content.dart';
+import 'package:flutter_quanly_nhanvien/utils/widgets/dialog_content.dart';
+import 'package:flutter_quanly_nhanvien/utils/widgets/edit_officer_dialog_content.dart';
 
 class RoomDetail extends StatefulWidget {
   final int roomIndex;
@@ -36,17 +39,23 @@ class _RoomDetailState extends State<RoomDetail> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Chi tiet phong ban'),
-      ),
-      body: BlocProvider<DetailRoomBloc>(
-        create: (context) => _detailRoomBloc,
-        child: WillPopScope(
-          onWillPop: () {
-            Navigator.pop(context, _officerList);
-            return;
-          },
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.pop(context, _officerList);
+        return;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Chi tiet phong ban'),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context, _officerList);
+            },
+          ),
+        ),
+        body: BlocProvider<DetailRoomBloc>(
+          create: (context) => _detailRoomBloc,
           child: SafeArea(
             child: Container(
               child: Column(
@@ -77,6 +86,9 @@ class _RoomDetailState extends State<RoomDetail> {
                       if (state is DetailRoomLoadSuccessState) {
                         _officerList = state.officers;
                       }
+                      if (state is RemoveSuccessState) {
+                        _officerList = state.officers;
+                      }
                       var list = Expanded(
                         child: Stack(
                           children: <Widget>[
@@ -88,8 +100,55 @@ class _RoomDetailState extends State<RoomDetail> {
                                     highlightColor: Colors.lightBlueAccent,
                                     radius: 0,
                                     onLongPress: () {
-                                      _detailRoomBloc.add(
-                                          DeleteOfficerEvent(index: index));
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Dialog(
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              child: Container(
+                                                color: Colors.white,
+                                                padding: EdgeInsets.all(8),
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    2 /
+                                                    3,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    1 /
+                                                    3,
+                                                child: Column(
+                                                  children: <Widget>[
+                                                    dialogContent(
+                                                        title: 'Sua nhan vien',
+                                                        icon: Icon(
+                                                            Icons.mode_edit),
+                                                        onTap: () {
+                                                          _onTapEditOfficerDialog(context: context, index: index);
+                                                        }),
+                                                    dialogContent(
+                                                        title:
+                                                            'Chuyen phong ban',
+                                                        icon: Icon(
+                                                            Icons.next_week)),
+                                                    dialogContent(
+                                                        title: 'Xoa nhan vien',
+                                                        icon:
+                                                            Icon(Icons.delete),
+                                                        onTap: () {
+                                                          _onTapDeleteOfficer(
+                                                              context: context,
+                                                              index: index,
+                                                              officers:
+                                                                  _officerList);
+                                                        }),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          });
                                     },
                                     child: Container(
                                       child: _listItemContent(
@@ -107,7 +166,13 @@ class _RoomDetailState extends State<RoomDetail> {
                         ),
                       );
                       return _officerList != null
-                          ? _officerList.length > 0 ? list : Container()
+                          ? _officerList.length > 0
+                              ? list
+                              : Container(
+                                  child: Center(
+                                      child:
+                                          Text('Phong ban chua co nhan vien')),
+                                )
                           : Container(
                               child: Center(
                                   child: Text('Phong ban chua co nhan vien')),
@@ -132,8 +197,17 @@ class _RoomDetailState extends State<RoomDetail> {
             children: <Widget>[
               Row(
                 children: <Widget>[
+                  officer.gender == 'male'
+                      ? Icon(
+                          Icons.person,
+                          color: Colors.blue,
+                        )
+                      : Icon(
+                          Icons.person,
+                          color: Colors.red,
+                        ),
                   Text(
-                    'Ma NV: ${officer.id}, ',
+                    ' Ma NV: ${officer.id}, ',
                     style: TextStyle(fontSize: 18),
                   ),
                   Text(
@@ -162,5 +236,64 @@ class _RoomDetailState extends State<RoomDetail> {
         )
       ],
     );
+  }
+
+  _onTapDeleteOfficer(
+      {BuildContext context, int index, List<Officer> officers}) {
+    Widget cancelButton = FlatButton(
+      child: Text("Khong"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Co"),
+      onPressed: () {
+        _detailRoomBloc.add(DeleteOfficerEvent(index: index));
+        Navigator.pop(context);
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Xoa nhan vien"),
+      content: Text(
+          "ban co chac chan muon xoa nhan vien '${officers[index].name}' ?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+//    }
+  }
+
+  _onTapEditOfficerDialog({BuildContext context, int index}) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return EditOfficerDialogContent(
+            index: index,
+            detailRoomBloc: _detailRoomBloc,
+            onTapEditOfficer: _onTapEditOfficer,
+          );
+        });
+  }
+
+  _onTapEditOfficer({BuildContext context, int index, String name, String gender}) {
+    print('aaaaaaaaaaaaaaaa');
+    _detailRoomBloc.add(EditOfficerEvent(
+      index: index,
+      name: name,
+      gender: gender,
+    ));
   }
 }

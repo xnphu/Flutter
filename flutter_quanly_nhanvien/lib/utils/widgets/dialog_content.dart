@@ -15,7 +15,7 @@ dialogContent({Function onTap, Icon icon, String title}) {
             child: Row(
               children: <Widget>[
                 icon,
-                Text(title),
+                Text(' $title'),
               ],
             ),
           ),
