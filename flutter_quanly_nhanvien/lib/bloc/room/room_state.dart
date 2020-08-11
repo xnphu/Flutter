@@ -9,8 +9,12 @@ class RoomLoadInProgressState extends RoomState {}
 
 class RoomLoadSuccessState extends RoomState {
   final List<Room> rooms;
-
   RoomLoadSuccessState({this.rooms});
+}
+
+class RoomChoiceLoadSuccessState extends RoomState {
+  final String roomChoice;
+  RoomChoiceLoadSuccessState({this.roomChoice});
 }
 
 class RoomModifyState extends RoomState {

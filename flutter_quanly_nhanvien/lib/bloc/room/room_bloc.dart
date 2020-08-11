@@ -7,6 +7,7 @@ import 'package:rxdart/rxdart.dart';
 
 class RoomBloc extends Bloc<RoomEvent, RoomState> {
   final List<Room> rooms = [];
+  String roomChoice = '';
   final _mpb = BehaviorSubject<String>();
   final _tpb = BehaviorSubject<String>();
   final _mnv = BehaviorSubject<String>();
@@ -83,9 +84,48 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
     if (event is RoomModifyEvent) {
 //      yield RoomLoadInProgressState();
 //      await Future.delayed(Duration(seconds: 2));
-      Room r = rooms[event.roomIndex].copyWith(officerList: event.officerNewList);
+      Room r =
+          rooms[event.roomIndex].copyWith(officerList: event.officerNewList);
       rooms[event.roomIndex] = r;
       yield RoomLoadSuccessState(rooms: rooms);
+    }
+
+    if (event is ChangeRoomEvent) {
+      print('aaaaaaaaa ${event.abc}');
+    }
+
+    if (event is SetRoomChoiceInitialValueEvent) {
+      print('---------');
+      print('choice ${event.roomChoice}');
+      print('officer ${event.officer}');
+      rooms.forEach((room) {
+        Officer _officer = event.officer;
+        List<Officer> _officerList = room.officerList;
+        String _roomId = event.roomChoice;
+        if (_officerList!=null&& _officerList.contains(_officer)) {
+          _officerList.remove(_officer);
+        }
+        if (room.id == _roomId) {
+          print('eeeeeeeee $_officer');
+          if (_officerList == null) {
+            _officerList = [];
+          }
+          _officerList.add(_officer);
+          print('list add $_officerList');
+        }
+      });
+      yield RoomChoiceLoadSuccessState(roomChoice: event.roomChoice);
+    }
+
+    if (event is SetRoomChoiceEvent) {
+      for (int index = 0; index < rooms.length; index++) {
+        List<Officer> _officerList = rooms[index].officerList;
+        if (_officerList != null &&
+            _officerList.toList().contains(event.officer)) {
+          roomChoice = rooms[index].id;
+        }
+      }
+    yield RoomChoiceLoadSuccessState(roomChoice: roomChoice);
     }
   }
 }

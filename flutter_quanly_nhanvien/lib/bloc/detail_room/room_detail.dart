@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_quanly_nhanvien/bloc/change_room/change_room_screen.dart';
 import 'package:flutter_quanly_nhanvien/bloc/detail_room/detail_room_bloc.dart';
 import 'package:flutter_quanly_nhanvien/bloc/detail_room/detail_room_event.dart';
 import 'package:flutter_quanly_nhanvien/bloc/detail_room/detail_room_state.dart';
@@ -126,13 +127,18 @@ class _RoomDetailState extends State<RoomDetail> {
                                                         icon: Icon(
                                                             Icons.mode_edit),
                                                         onTap: () {
-                                                          _onTapEditOfficerDialog(context: context, index: index);
+                                                          _onTapEditOfficerDialog(
+                                                              context: context,
+                                                              index: index);
                                                         }),
                                                     dialogContent(
                                                         title:
                                                             'Chuyen phong ban',
                                                         icon: Icon(
-                                                            Icons.next_week)),
+                                                            Icons.next_week),
+                                                        onTap: () {
+                                                          _onTapMoveOfficer(context: context, index: index);
+                                                        }),
                                                     dialogContent(
                                                         title: 'Xoa nhan vien',
                                                         icon:
@@ -288,12 +294,23 @@ class _RoomDetailState extends State<RoomDetail> {
         });
   }
 
-  _onTapEditOfficer({BuildContext context, int index, String name, String gender}) {
-    print('aaaaaaaaaaaaaaaa');
+  _onTapEditOfficer(
+      {BuildContext context, int index, String name, String gender}) {
     _detailRoomBloc.add(EditOfficerEvent(
       index: index,
       name: name,
       gender: gender,
     ));
+  }
+
+  _onTapMoveOfficer({
+    BuildContext context,
+    int index,
+  }) {
+    Navigator.pop(context);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => ChangeRoomScreen(
+      officer: _officerList[index],
+    )));
   }
 }

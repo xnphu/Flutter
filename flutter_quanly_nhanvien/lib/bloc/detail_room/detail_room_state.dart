@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:flutter_quanly_nhanvien/models/models.dart';
 
 abstract class DetailRoomState {

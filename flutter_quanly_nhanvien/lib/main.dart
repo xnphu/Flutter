@@ -13,7 +13,11 @@ import 'models/models.dart';
 import 'models/room.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MultiBlocProvider(providers: [
+    BlocProvider<RoomBloc>(
+      create: (context) => RoomBloc(),
+    )
+  ], child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -26,9 +30,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: BlocProvider<RoomBloc>(
-          create: (context) => RoomBloc(),
-          child: MyHomePage(title: 'Quan ly nhan vien')),
+      home: MyHomePage(title: 'Quan ly nhan vien'),
+//      home: BlocProvider<RoomBloc>(
+//          create: (context) => RoomBloc(),
+//          child: MyHomePage(title: 'Quan ly nhan vien')),
     );
   }
 }
@@ -321,4 +326,6 @@ class _MyHomePageState extends State<MyHomePage> {
       _bloc.add(RoomModifyEvent(roomIndex: index, officerNewList: listBack));
     }
   }
+
+  _onChangeRoom({BuildContext context, int index}) {}
 }

@@ -66,3 +66,34 @@ class RoomModifyEvent extends RoomEvent {
   String toString() =>
       'RoomModify index { $roomIndex } new officer list: $officerNewList';
 }
+
+class ChangeRoomEvent extends RoomEvent {
+  final String abc;
+
+  ChangeRoomEvent({this.abc});
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [abc];
+}
+
+class SetRoomChoiceEvent extends RoomEvent {
+  final Officer officer;
+
+  SetRoomChoiceEvent({this.officer});
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [officer];
+}
+
+class SetRoomChoiceInitialValueEvent extends RoomEvent {
+  final String roomChoice;
+  final Officer officer;
+
+  SetRoomChoiceInitialValueEvent({this.roomChoice, this.officer});
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [roomChoice];
+}
