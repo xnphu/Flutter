@@ -49,3 +49,16 @@ class DeleteOfficerEvent extends DetailRoomEvent {
   @override
   String toString() => 'Deleted officer at index: { $index }';
 }
+
+class ChangeRoomSuccessEvent extends DetailRoomEvent {
+  final List<Officer> officers;
+
+  ChangeRoomSuccessEvent({this.officers});
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [officers];
+
+  @override
+  String toString() => 'Change room officer { $officers }';
+}

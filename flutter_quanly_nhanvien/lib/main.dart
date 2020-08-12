@@ -5,6 +5,7 @@ import 'package:flutter_quanly_nhanvien/bloc/room/room_bloc.dart';
 import 'package:flutter_quanly_nhanvien/bloc/room/room_event.dart';
 import 'package:flutter_quanly_nhanvien/bloc/room/room_state.dart';
 import 'package:flutter_quanly_nhanvien/bloc/detail_room/room_detail.dart';
+import 'package:flutter_quanly_nhanvien/bloc/set_position/set_position_screen.dart';
 import 'package:flutter_quanly_nhanvien/utils/widgets/add_officer_dialog_content.dart';
 import 'package:flutter_quanly_nhanvien/utils/widgets/dialog_content.dart';
 import 'package:flutter_quanly_nhanvien/utils/widgets/text_field.dart';
@@ -208,6 +209,17 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                 'Danh sach nhan vien'),
                                                         dialogContent(
                                                             onTap: () {
+                                                              _onTapSetPosition(
+                                                                  context:
+                                                                      context,
+                                                                  index: index);
+                                                            },
+                                                            icon: Icon(
+                                                                Icons.person),
+                                                            title:
+                                                                'Lap truong/pho phong'),
+                                                        dialogContent(
+                                                            onTap: () {
                                                               _onTapDeleteRoom(
                                                                   index: index);
                                                             },
@@ -327,5 +339,13 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  _onChangeRoom({BuildContext context, int index}) {}
+  _onTapSetPosition({BuildContext context, int index}) async {
+    Navigator.pop(context);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => SetPositionScreen(
+                  roomIndex: index,
+                )));
+  }
 }

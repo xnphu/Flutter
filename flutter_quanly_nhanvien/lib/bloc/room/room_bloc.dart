@@ -90,34 +90,39 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
       yield RoomLoadSuccessState(rooms: rooms);
     }
 
-    if (event is ChangeRoomEvent) {
-      print('aaaaaaaaa ${event.abc}');
-    }
-
-    if (event is SetRoomChoiceInitialValueEvent) {
+    if (event is SetRoomChoiceEvent) {
       print('---------');
       print('choice ${event.roomChoice}');
       print('officer ${event.officer}');
-      rooms.forEach((room) {
+      //chuyen list null -> []
+      rooms.asMap().forEach((index, room) {
+        if (room.officerList == null) {
+          Room r = room.copyWith(officerList: []);
+          rooms[index] = r;
+        }
+      });
+      rooms.asMap().forEach((index, room) {
         Officer _officer = event.officer;
         List<Officer> _officerList = room.officerList;
         String _roomId = event.roomChoice;
-        if (_officerList!=null&& _officerList.contains(_officer)) {
+        if (_officerList == null) {
+          _officerList = [];
+        }
+        if (_officerList != null && _officerList.contains(_officer)) {
           _officerList.remove(_officer);
+//          print('list $index remove  $_officerList');
         }
         if (room.id == _roomId) {
-          print('eeeeeeeee $_officer');
-          if (_officerList == null) {
-            _officerList = [];
-          }
           _officerList.add(_officer);
-          print('list add $_officerList');
+//          print('list $index add ${_officerList}');
         }
+//        print('list $index final ${_officerList}');
       });
+      print('rooms ${rooms[0].officerList}');
       yield RoomChoiceLoadSuccessState(roomChoice: event.roomChoice);
     }
 
-    if (event is SetRoomChoiceEvent) {
+    if (event is SetRoomChoiceInitialValueEvent) {
       for (int index = 0; index < rooms.length; index++) {
         List<Officer> _officerList = rooms[index].officerList;
         if (_officerList != null &&
@@ -125,7 +130,14 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
           roomChoice = rooms[index].id;
         }
       }
-    yield RoomChoiceLoadSuccessState(roomChoice: roomChoice);
+      print('room choice $roomChoice');
+      yield RoomChoiceLoadSuccessState(roomChoice: roomChoice);
+      print('aaaaaaaaaaaaaaaaaaa');
+      yield ChangeRoomState(rooms: rooms);
+    }
+
+    if (event is SetPositionScreenLoadSuccessEvent) {
+      yield SetPositionScreenLoadSuccessState(officers: rooms[event.roomIndex].officerList);
     }
   }
 }

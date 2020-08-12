@@ -42,5 +42,10 @@ class DetailRoomBloc extends Bloc<DetailRoomEvent, DetailRoomState> {
       officers[event.index] = officer;
       yield DetailRoomLoadSuccessState(officers: officers);
     }
+    if (event is ChangeRoomSuccessEvent) {
+      print('aaaaa ${event.officers}');
+      officers.addAll(List.from(event.officers));
+      yield ChangeRoomSuccessState(officers: officers);
+    }
   }
 }

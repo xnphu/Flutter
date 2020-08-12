@@ -77,23 +77,33 @@ class ChangeRoomEvent extends RoomEvent {
   List<Object> get props => [abc];
 }
 
-class SetRoomChoiceEvent extends RoomEvent {
+class SetRoomChoiceInitialValueEvent extends RoomEvent {
   final Officer officer;
 
-  SetRoomChoiceEvent({this.officer});
+  SetRoomChoiceInitialValueEvent({this.officer});
 
   @override
   // TODO: implement props
   List<Object> get props => [officer];
 }
 
-class SetRoomChoiceInitialValueEvent extends RoomEvent {
+class SetRoomChoiceEvent extends RoomEvent {
   final String roomChoice;
   final Officer officer;
 
-  SetRoomChoiceInitialValueEvent({this.roomChoice, this.officer});
+  SetRoomChoiceEvent({this.roomChoice, this.officer});
 
   @override
   // TODO: implement props
-  List<Object> get props => [roomChoice];
+  List<Object> get props => [roomChoice, officer];
+}
+
+class SetPositionScreenLoadSuccessEvent extends RoomEvent {
+  final int roomIndex;
+
+  SetPositionScreenLoadSuccessEvent({this.roomIndex});
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [roomIndex];
 }

@@ -24,6 +24,7 @@ class RoomDetail extends StatefulWidget {
 class _RoomDetailState extends State<RoomDetail> {
   DetailRoomBloc _detailRoomBloc;
   List<Officer> _officerList;
+  int _roomIndex;
 
   @override
   void initState() {
@@ -32,6 +33,7 @@ class _RoomDetailState extends State<RoomDetail> {
     _detailRoomBloc = DetailRoomBloc();
     _detailRoomBloc.add(DetailRoomInitialEvent(
         officers: widget.officerList == null ? [] : widget.officerList));
+    _roomIndex = widget.roomIndex;
 //    var x = BlocProvider.of<RoomBloc>(context);
 //    print('xxxxxxxxxx: ${x}');
 //    _detailRoomBloc = BlocProvider.of<DetailRoomBloc>(context);
@@ -265,7 +267,7 @@ class _RoomDetailState extends State<RoomDetail> {
     AlertDialog alert = AlertDialog(
       title: Text("Xoa nhan vien"),
       content: Text(
-          "ban co chac chan muon xoa nhan vien '${officers[index].name}' ?"),
+          "Ban co chac chan muon xoa nhan vien '${officers[index].name}' ?"),
       actions: [
         cancelButton,
         continueButton,
@@ -306,11 +308,15 @@ class _RoomDetailState extends State<RoomDetail> {
   _onTapMoveOfficer({
     BuildContext context,
     int index,
-  }) {
+  }) async{
+    //hide dialog
     Navigator.pop(context);
-    Navigator.push(
+    var listBack = await Navigator.push(
         context, MaterialPageRoute(builder: (context) => ChangeRoomScreen(
       officer: _officerList[index],
+      roomIndex: _roomIndex,
     )));
+    print('listBack $listBack');
+    _detailRoomBloc.add(ChangeRoomSuccessEvent(officers: listBack));
   }
 }

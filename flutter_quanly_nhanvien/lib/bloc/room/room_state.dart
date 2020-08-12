@@ -23,4 +23,16 @@ class RoomModifyState extends RoomState {
   RoomModifyState({this.rooms});
 }
 
+class ChangeRoomState extends RoomState {
+  final List<Room> rooms;
+
+  ChangeRoomState({this.rooms});
+}
+
+class SetPositionScreenLoadSuccessState extends RoomState {
+  final List<Officer> officers;
+
+  SetPositionScreenLoadSuccessState({this.officers});
+}
+
 class RoomLoadFailureState extends RoomState {}

@@ -26,3 +26,9 @@ class RemoveSuccessState extends DetailRoomState {
 
   RemoveSuccessState({this.officers});
 }
+
+class ChangeRoomSuccessState extends DetailRoomState {
+  final List<Officer> officers;
+
+  ChangeRoomSuccessState({this.officers});
+}

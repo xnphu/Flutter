@@ -7,8 +7,10 @@ import 'package:flutter_quanly_nhanvien/models/models.dart';
 
 class ChangeRoomScreen extends StatefulWidget {
   final Officer officer;
+  final int roomIndex;
+  final Function abc;
 
-  const ChangeRoomScreen({Key key, this.officer}) : super(key: key);
+  const ChangeRoomScreen({Key key, this.officer, this.roomIndex, this.abc}) : super(key: key);
 
   @override
   _ChangeRoomScreenState createState() => new _ChangeRoomScreenState();
@@ -18,6 +20,7 @@ class _ChangeRoomScreenState extends State<ChangeRoomScreen> {
   String _roomChoice;
   RoomBloc _roomBloc;
   Officer _officer;
+  int _roomIndex;
   List<Room> _listRoom;
 
   @override
@@ -26,7 +29,8 @@ class _ChangeRoomScreenState extends State<ChangeRoomScreen> {
     super.initState();
     _roomBloc = BlocProvider.of<RoomBloc>(context);
     _officer = widget.officer;
-    _roomBloc.add(SetRoomChoiceEvent(officer: _officer));
+    _roomIndex = widget.roomIndex;
+    _roomBloc.add(SetRoomChoiceInitialValueEvent(officer: _officer));
   }
 
   @override
@@ -53,14 +57,13 @@ class _ChangeRoomScreenState extends State<ChangeRoomScreen> {
               BlocBuilder(
                 bloc: _roomBloc,
                 builder: (context, state) {
-                  if (state is RoomLoadSuccessState) {
-                    _listRoom = state.rooms;
-                  }
                   if (state is RoomChoiceLoadSuccessState) {
-                    if(_roomChoice != state.roomChoice) {
+//                    if(_roomChoice != state.roomChoice) {
                       _roomChoice = state.roomChoice;
-                      print('aaaaaaaaaaaa');
-                    }
+//                    }
+                  }
+                  if (state is ChangeRoomState) {
+                    _listRoom = state.rooms;
                   }
                   var list = Expanded(
                     child: ListView.builder(
@@ -77,7 +80,11 @@ class _ChangeRoomScreenState extends State<ChangeRoomScreen> {
                 },
               ),
               RaisedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pop(context, _listRoom[_roomIndex].officerList);
+                  //back to home screen
+                  Navigator.pop(context);
+                },
                 color: Colors.blueAccent,
                 child: Text('Luu'),
               ),
@@ -104,14 +111,10 @@ class _ChangeRoomScreenState extends State<ChangeRoomScreen> {
           value: id,
           groupValue: _roomChoice,
           onChanged: (value) {
-            _roomBloc.add(SetRoomChoiceInitialValueEvent(roomChoice: value, officer: _officer));
+            _roomBloc.add(SetRoomChoiceEvent(roomChoice: value, officer: _officer));
           },
         ),
       ],
     );
   }
-
-//  _onSaveChangeRoom() {
-//    _roomBloc.add(ChangeRoomEvent(abc: value));
-//  }
 }

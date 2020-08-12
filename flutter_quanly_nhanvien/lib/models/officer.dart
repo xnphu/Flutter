@@ -5,8 +5,9 @@ class Officer extends Equatable {
   final String name;
   final String roomId;
   final String gender;
+  final String position;
 
-  Officer copyWith({String id, String name, String gender, String roomId}) =>
+  Officer copyWith({String id, String name, String gender, String roomId, String position}) =>
       Officer(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -14,9 +15,9 @@ class Officer extends Equatable {
         roomId: roomId ?? this.roomId,
       );
 
-  Officer({this.id, this.name, this.roomId, this.gender});
+  Officer({this.id, this.name, this.roomId, this.gender, this.position});
 
   @override
   // TODO: implement props
-  List<Object> get props => [id, name, roomId, gender];
+  List<Object> get props => [id, name, roomId, gender, position];
 }
