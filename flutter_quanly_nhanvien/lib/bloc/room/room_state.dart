@@ -35,4 +35,10 @@ class SetPositionScreenLoadSuccessState extends RoomState {
   SetPositionScreenLoadSuccessState({this.officers});
 }
 
+class SetPhoPhongSuccessState extends RoomState {
+  final List<Officer> officers;
+
+  SetPhoPhongSuccessState({this.officers});
+}
+
 class RoomLoadFailureState extends RoomState {}

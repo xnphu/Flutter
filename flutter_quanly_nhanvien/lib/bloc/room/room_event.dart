@@ -107,3 +107,26 @@ class SetPositionScreenLoadSuccessEvent extends RoomEvent {
   // TODO: implement props
   List<Object> get props => [roomIndex];
 }
+
+class SetTruongPhongEvent extends RoomEvent {
+  final int roomIndex;
+  final int officerIndex;
+
+  SetTruongPhongEvent({this.roomIndex, this.officerIndex});
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [roomIndex, officerIndex];
+}
+
+class SetPhoPhongEvent extends RoomEvent {
+  final int roomIndex;
+  final int officerIndex;
+  final bool isSelected;
+
+  SetPhoPhongEvent({this.roomIndex, this.officerIndex, this.isSelected});
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [roomIndex, officerIndex, isSelected];
+}

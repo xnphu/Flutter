@@ -14,18 +14,18 @@ class SetPositionScreen extends StatefulWidget {
   _SetPositionScreen createState() => new _SetPositionScreen();
 }
 
-enum Position { TruongPhong, PhoPhong }
-
 class _SetPositionScreen extends State<SetPositionScreen> {
   RoomBloc _roomBloc;
   List<Officer> _officerList;
-  String _truongPhongRadioValue;
-  List<bool> checkBoxValue = [false, false];
+  int _roomIndex;
+  String _truongPhongID;
+  List<bool> checkBoxValue = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _roomIndex = widget.roomIndex;
     _roomBloc = BlocProvider.of(context);
     _roomBloc
         .add(SetPositionScreenLoadSuccessEvent(roomIndex: widget.roomIndex));
@@ -47,6 +47,7 @@ class _SetPositionScreen extends State<SetPositionScreen> {
                 builder: (context, state) {
                   if (state is SetPositionScreenLoadSuccessState) {
                     _officerList = state.officers;
+                    _setRadioValue();
                   }
                   var list = Expanded(
                     child: ListView.builder(
@@ -56,6 +57,7 @@ class _SetPositionScreen extends State<SetPositionScreen> {
                             id: _officerList[index].id,
                             name: _officerList[index].name,
                             position: _officerList[index].position,
+                            index: index
                           );
                         }),
                   );
@@ -68,16 +70,17 @@ class _SetPositionScreen extends State<SetPositionScreen> {
                 builder: (context, state) {
                   if (state is SetPositionScreenLoadSuccessState) {
                     _officerList = state.officers;
+                    _setRadioValue();
                   }
                   var list = Expanded(
                     child: ListView.builder(
                         itemCount: _officerList?.length ?? 0,
                         itemBuilder: (BuildContext context, index) {
                           return _listPhoPhongContent(
-                              id: _officerList[index].id,
-                              name: _officerList[index].name,
-                              position: _officerList[index].position,
-                              index: index,
+                            id: _officerList[index].id,
+                            name: _officerList[index].name,
+                            position: _officerList[index].position,
+                            index: index,
                           );
                         }),
                   );
@@ -105,38 +108,67 @@ class _SetPositionScreen extends State<SetPositionScreen> {
     );
   }
 
-  _listTruongPhongContent({String id, String name, String position}) {
+  _listTruongPhongContent({String id, String name, Position position, int index}) {
+    String positionString;
+    switch (position) {
+      case Position.NhanVien:
+        positionString = 'Nhan Vien';
+        break;
+      case Position.TruongPhong:
+        positionString = 'Truong Phong';
+        break;
+      case Position.PhoPhong:
+        positionString = 'Pho Phong';
+        break;
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.all(10.0),
           child: Text(
-            '$id - $name - chuc vu ${position ?? 'Nhan vien'}',
+            '$id - $name - chuc vu $positionString',
             style: TextStyle(fontSize: 18),
           ),
         ),
         Radio(
           value: id,
-          groupValue: _truongPhongRadioValue,
+          groupValue: _truongPhongID,
           onChanged: (value) {
             setState(() {
-              _truongPhongRadioValue = value;
+              print('value: $value');
+              _truongPhongID = value;
             });
+            _roomBloc.add(SetTruongPhongEvent(roomIndex: _roomIndex, officerIndex: index));
           },
         ),
       ],
     );
   }
 
-  _listPhoPhongContent({String id, String name, String position, int index}) {
+  _listPhoPhongContent({String id, String name, Position position, int index}) {
+    String positionString;
+    checkBoxValue.add(false);
+    switch (position) {
+      case Position.NhanVien:
+        positionString = 'Nhan Vien';
+        break;
+      case Position.TruongPhong:
+        positionString = 'Truong Phong';
+        checkBoxValue[index] = false;
+        break;
+      case Position.PhoPhong:
+        positionString = 'Pho Phong';
+        checkBoxValue[index] = true;
+        break;
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.all(10.0),
           child: Text(
-            '$id - $name - chuc vu ${position ?? 'Nhan vien'}',
+            '$id - $name - chuc vu $positionString',
             style: TextStyle(fontSize: 18),
           ),
         ),
@@ -144,11 +176,21 @@ class _SetPositionScreen extends State<SetPositionScreen> {
           value: checkBoxValue[index],
           onChanged: (value) {
             setState(() {
-              checkBoxValue[index]=value;
+              checkBoxValue[index] = value;
             });
+            _roomBloc.add(SetPhoPhongEvent(
+                roomIndex: _roomIndex, officerIndex: index, isSelected: value));
           },
         ),
       ],
     );
+  }
+
+  void _setRadioValue() {
+    _officerList.forEach((officer) {
+      if (officer.position==Position.TruongPhong) {
+        _truongPhongID=officer.id;
+      } else _truongPhongID='';
+    });
   }
 }

@@ -137,7 +137,38 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
     }
 
     if (event is SetPositionScreenLoadSuccessEvent) {
-      yield SetPositionScreenLoadSuccessState(officers: rooms[event.roomIndex].officerList);
+      yield SetPositionScreenLoadSuccessState(
+          officers: rooms[event.roomIndex].officerList);
+    }
+
+    if (event is SetTruongPhongEvent) {
+      List<Officer> _officerList = rooms[event.roomIndex].officerList;
+      //chuyen truong phong truoc ve nhan vien
+      _officerList.forEach((officer) {
+        if(officer.position==Position.TruongPhong) {
+          Officer temp = officer.copyWith(position: Position.NhanVien);
+          officer = temp;
+        }
+      });
+      //chuyen truong phong moi
+      Officer officerTemp = _officerList[event.officerIndex]
+          .copyWith(position: Position.TruongPhong);
+      _officerList[event.officerIndex] = officerTemp;
+      yield RoomLoadSuccessState(rooms: rooms);
+    }
+
+    if (event is SetPhoPhongEvent) {
+      List<Officer> _officerList = rooms[event.roomIndex].officerList;
+      if (event.isSelected ==true) {
+        Officer officerTemp = _officerList[event.officerIndex]
+            .copyWith(position: Position.PhoPhong);
+        _officerList[event.officerIndex] = officerTemp;
+      } else {
+        Officer officerTemp = _officerList[event.officerIndex]
+            .copyWith(position: Position.NhanVien);
+        _officerList[event.officerIndex] = officerTemp;
+      }
+      yield RoomLoadSuccessState(rooms: rooms);
     }
   }
 }

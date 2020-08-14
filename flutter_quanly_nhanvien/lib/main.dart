@@ -6,6 +6,7 @@ import 'package:flutter_quanly_nhanvien/bloc/room/room_event.dart';
 import 'package:flutter_quanly_nhanvien/bloc/room/room_state.dart';
 import 'package:flutter_quanly_nhanvien/bloc/detail_room/room_detail.dart';
 import 'package:flutter_quanly_nhanvien/bloc/set_position/set_position_screen.dart';
+import 'package:flutter_quanly_nhanvien/models/officer.dart';
 import 'package:flutter_quanly_nhanvien/utils/widgets/add_officer_dialog_content.dart';
 import 'package:flutter_quanly_nhanvien/utils/widgets/dialog_content.dart';
 import 'package:flutter_quanly_nhanvien/utils/widgets/text_field.dart';
@@ -84,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
               FocusScope.of(context).unfocus();
             },
             child: Container(
-              padding: EdgeInsets.all(10),
+//              padding: EdgeInsets.all(10),
               child: Column(
                 children: <Widget>[
                   textField(
@@ -261,6 +262,26 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _listItemContent({String id, String roomName, List<Officer> officerList}) {
+    String _truongPhongName='';
+    List<Widget> _phoPhongList = [];
+    var _listTextStyle = TextStyle(
+        fontSize: 15, fontStyle: FontStyle.italic, color: Colors.deepPurple);
+    if (officerList == null) officerList = [];
+    officerList.asMap().forEach((index, officer) {
+      switch (officer.position) {
+        case Position.TruongPhong:
+          _truongPhongName= '[${officer.name}]';
+          break;
+        case Position.PhoPhong:
+          _phoPhongList.add(Text(
+            '${index + 1}. ${officer.name}',
+            style: _listTextStyle,
+          ));
+          break;
+        case Position.NhanVien:
+          break;
+      }
+    });
     return Column(
       children: <Widget>[
         Container(
@@ -280,7 +301,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Row(
                 children: <Widget>[
-                  Text('Truong phong: [Chua co]',
+                  Text('Truong phong: ${_truongPhongName=='' ? '[Chua co]' : _truongPhongName}',
                       style: TextStyle(
                           fontSize: 15,
                           fontStyle: FontStyle.italic,
@@ -289,11 +310,20 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Row(
                 children: <Widget>[
-                  Text('Pho phong: [Chua co]',
+                  Text('Pho phong: ${_phoPhongList.length==0 ? '[Chua co]' : ''}',
                       style: TextStyle(
                           fontSize: 15,
                           fontStyle: FontStyle.italic,
                           color: Colors.deepPurple)),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: _phoPhongList,
+                  ),
                 ],
               ),
             ],
