@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_quanly_nhanvien/bloc/room/room_event.dart';
-import 'package:flutter_quanly_nhanvien/bloc/room/room_state.dart';
+import 'package:flutter_quanly_nhanvien/screens/room/room_event.dart';
+import 'package:flutter_quanly_nhanvien/screens/room/room_state.dart';
 import 'package:flutter_quanly_nhanvien/models/models.dart';
 import 'package:rxdart/rxdart.dart';
 

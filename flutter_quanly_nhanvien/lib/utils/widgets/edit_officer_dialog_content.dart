@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_quanly_nhanvien/bloc/detail_room/detail_room_bloc.dart';
-import 'package:flutter_quanly_nhanvien/bloc/detail_room/detail_room_event.dart';
-import 'package:flutter_quanly_nhanvien/models/models.dart';
+import 'package:flutter_quanly_nhanvien/screens/detail_room/detail_room_bloc.dart';
 import 'package:flutter_quanly_nhanvien/utils/widgets/text_field.dart';
 
 class EditOfficerDialogContent extends StatefulWidget {

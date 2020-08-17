@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_quanly_nhanvien/bloc/room/room_bloc.dart';
-import 'package:flutter_quanly_nhanvien/bloc/room/room_event.dart';
+import 'package:flutter_quanly_nhanvien/screens/room/room_bloc.dart';
+import 'package:flutter_quanly_nhanvien/screens/room/room_event.dart';
 import 'package:flutter_quanly_nhanvien/models/models.dart';
 import 'package:flutter_quanly_nhanvien/utils/widgets/text_field.dart';
 

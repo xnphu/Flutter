@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_quanly_nhanvien/bloc/change_room/change_room_screen.dart';
-import 'package:flutter_quanly_nhanvien/bloc/detail_room/detail_room_bloc.dart';
-import 'package:flutter_quanly_nhanvien/bloc/detail_room/detail_room_event.dart';
-import 'package:flutter_quanly_nhanvien/bloc/detail_room/detail_room_state.dart';
-import 'package:flutter_quanly_nhanvien/bloc/room/room_bloc.dart';
+import 'package:flutter_quanly_nhanvien/screens/change_room/change_room_screen.dart';
+import 'package:flutter_quanly_nhanvien/screens/detail_room/detail_room_bloc.dart';
+import 'package:flutter_quanly_nhanvien/screens/detail_room/detail_room_event.dart';
+import 'package:flutter_quanly_nhanvien/screens/detail_room/detail_room_state.dart';
+import 'package:flutter_quanly_nhanvien/screens/room/room_bloc.dart';
 import 'package:flutter_quanly_nhanvien/models/models.dart';
 import 'package:flutter_quanly_nhanvien/utils/widgets/add_officer_dialog_content.dart';
 import 'package:flutter_quanly_nhanvien/utils/widgets/dialog_content.dart';

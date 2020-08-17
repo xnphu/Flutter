@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_quanly_nhanvien/bloc/room/room_bloc.dart';
-import 'package:flutter_quanly_nhanvien/bloc/room/room_event.dart';
-import 'package:flutter_quanly_nhanvien/bloc/room/room_state.dart';
+import 'package:flutter_quanly_nhanvien/screens/room/room_bloc.dart';
+import 'package:flutter_quanly_nhanvien/screens/room/room_event.dart';
+import 'package:flutter_quanly_nhanvien/screens/room/room_state.dart';
 import 'package:flutter_quanly_nhanvien/models/officer.dart';
 
 class SetPositionScreen extends StatefulWidget {
