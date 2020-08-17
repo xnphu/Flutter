@@ -144,10 +144,10 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
     if (event is SetTruongPhongEvent) {
       List<Officer> _officerList = rooms[event.roomIndex].officerList;
       //chuyen truong phong truoc ve nhan vien
-      _officerList.forEach((officer) {
+      _officerList.asMap().forEach((index,officer) {
         if(officer.position==Position.TruongPhong) {
           Officer temp = officer.copyWith(position: Position.NhanVien);
-          officer = temp;
+          _officerList[index] = temp;
         }
       });
       //chuyen truong phong moi
@@ -160,6 +160,7 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
     if (event is SetPhoPhongEvent) {
       List<Officer> _officerList = rooms[event.roomIndex].officerList;
       if (event.isSelected ==true) {
+        print('position ${_officerList[event.officerIndex].position}');
         Officer officerTemp = _officerList[event.officerIndex]
             .copyWith(position: Position.PhoPhong);
         _officerList[event.officerIndex] = officerTemp;

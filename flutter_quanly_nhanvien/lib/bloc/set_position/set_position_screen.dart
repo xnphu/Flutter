@@ -54,11 +54,10 @@ class _SetPositionScreen extends State<SetPositionScreen> {
                         itemCount: _officerList?.length ?? 0,
                         itemBuilder: (BuildContext context, index) {
                           return _listTruongPhongContent(
-                            id: _officerList[index].id,
-                            name: _officerList[index].name,
-                            position: _officerList[index].position,
-                            index: index
-                          );
+                              id: _officerList[index].id,
+                              name: _officerList[index].name,
+                              position: _officerList[index].position,
+                              index: index);
                         }),
                   );
                   return list;
@@ -108,7 +107,8 @@ class _SetPositionScreen extends State<SetPositionScreen> {
     );
   }
 
-  _listTruongPhongContent({String id, String name, Position position, int index}) {
+  _listTruongPhongContent(
+      {String id, String name, Position position, int index}) {
     String positionString;
     switch (position) {
       case Position.NhanVien:
@@ -116,6 +116,7 @@ class _SetPositionScreen extends State<SetPositionScreen> {
         break;
       case Position.TruongPhong:
         positionString = 'Truong Phong';
+        _truongPhongID = id;
         break;
       case Position.PhoPhong:
         positionString = 'Pho Phong';
@@ -136,10 +137,10 @@ class _SetPositionScreen extends State<SetPositionScreen> {
           groupValue: _truongPhongID,
           onChanged: (value) {
             setState(() {
-              print('value: $value');
               _truongPhongID = value;
             });
-            _roomBloc.add(SetTruongPhongEvent(roomIndex: _roomIndex, officerIndex: index));
+            _roomBloc.add(SetTruongPhongEvent(
+                roomIndex: _roomIndex, officerIndex: index));
           },
         ),
       ],
@@ -156,6 +157,7 @@ class _SetPositionScreen extends State<SetPositionScreen> {
       case Position.TruongPhong:
         positionString = 'Truong Phong';
         checkBoxValue[index] = false;
+        _truongPhongID = id;
         break;
       case Position.PhoPhong:
         positionString = 'Pho Phong';
@@ -177,6 +179,9 @@ class _SetPositionScreen extends State<SetPositionScreen> {
           onChanged: (value) {
             setState(() {
               checkBoxValue[index] = value;
+              if (value == true) {
+                _truongPhongID = '';
+              }
             });
             _roomBloc.add(SetPhoPhongEvent(
                 roomIndex: _roomIndex, officerIndex: index, isSelected: value));
@@ -188,9 +193,9 @@ class _SetPositionScreen extends State<SetPositionScreen> {
 
   void _setRadioValue() {
     _officerList.forEach((officer) {
-      if (officer.position==Position.TruongPhong) {
-        _truongPhongID=officer.id;
-      } else _truongPhongID='';
+      if (officer.position == Position.TruongPhong) {
+        _truongPhongID = officer.id;
+      }
     });
   }
 }

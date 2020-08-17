@@ -274,7 +274,7 @@ class _MyHomePageState extends State<MyHomePage> {
           break;
         case Position.PhoPhong:
           _phoPhongList.add(Text(
-            '${index + 1}. ${officer.name}',
+            '- ${officer.name}',
             style: _listTextStyle,
           ));
           break;
