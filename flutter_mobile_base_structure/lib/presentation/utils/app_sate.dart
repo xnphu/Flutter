@@ -1,0 +1,4 @@
+enum AppState {
+  launch,
+  welcome,
+}

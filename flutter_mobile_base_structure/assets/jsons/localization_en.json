@@ -1,0 +1,14 @@
+{
+    "app_name": "NOBO",
+    "button_label_touchid": "Nhập vân tay",
+    "button_label_faceid": "FaceID",
+    "button_label_login": "ĐĂNG NHẬP",
+    "button_label_register": "ĐĂNG KÝ",
+    "login_username": "Tên đăng nhập",
+    "login_input_username": "Nhập tên đăng nhập",
+    "login_password": "Mật khẩu",
+    "login_input_password": "Nhập mật khẩu",
+    "remember_login_welcome_message": "Chào mừng quay tở lại",
+    "not_me_button": "Không phải tôi",
+    "login_by_another_account": "Đăng nhập bằng tài khoản khác"
+}
