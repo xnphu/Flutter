@@ -27,15 +27,21 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _bloc = BlocProvider.of<RoomBloc>(context);
-    print('widget username ${widget.username}');
+    _bloc = RoomBloc();
+//    _bloc = BlocProvider.of<RoomBloc>(context);
+    print('widget username ${widget.username.length}');
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    super.dispose();
+    idController.dispose();
+    roomNameController.dispose();
+    maNVController.dispose();
+    tenNVController.dispose();
     _bloc.disPose();
+    super.dispose();
+
   }
 
   final TextEditingController idController = new TextEditingController();
@@ -47,154 +53,159 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('Quan ly nhan vien'),
-        ),
-        body: SafeArea(
-          child: GestureDetector(
-            onTap: () {
-              FocusScope.of(context).unfocus();
-            },
-            child: Container(
+    return BlocProvider<RoomBloc>(
+      create: (context) => _bloc,
+      child: Scaffold(
+          appBar: AppBar(
+            title: Text('Quan ly nhan vien'),
+          ),
+          body: SafeArea(
+            child: GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: Container(
 //              padding: EdgeInsets.all(10),
-              child: Column(
-                children: <Widget>[
-                  widget.username == 'tp'
-                      ? Column(
-                          children: <Widget>[
-                            textField(
-                                title: 'Ma phong ban',
-                                controller: idController,
-                                onChange: (val) {
-                                  _bloc.changeMpb(val);
-                                }),
-                            textField(
-                                title: 'Ten phong ban',
-                                controller: roomNameController,
-                                onChange: _bloc.changeTpb),
-                            StreamBuilder(
-                              builder: (_, data) {
-                                var isShow = data.data ?? false;
-                                return isShow
-                                    ? RaisedButton(
-                                        color: Colors.lightBlue,
-                                        onPressed: () {
-                                          print('bloc: $_bloc');
-                                          _bloc.add(RoomAddedEvent(Room(
-                                              id: idController.text,
-                                              name: roomNameController.text)));
-                                          idController.clear();
-                                          roomNameController.clear();
-                                          _bloc.changeMpb("");
-                                          _bloc.changeTpb("");
-                                          FocusScope.of(context).unfocus();
-                                        },
-                                        child: Text('Luu phong ban'),
-                                      )
-                                    : RaisedButton(
-                                        onPressed: () {},
-                                        child: Text('Luu phong ban'),
-                                      );
-                              },
-                              initialData: false,
-                              stream: _bloc.validInput,
-                            ),
-                            SizedBox(height: 8),
-                          ],
-                        )
-                      : Container(),
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.all(5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text('Danh sach phong ban'),
-                      ],
-                    ),
-                    decoration: BoxDecoration(color: Colors.green),
-                  ),
-                  BlocBuilder(
-                    bloc: _bloc,
-                    builder: (context, state) {
-                      var isLoading = state is RoomLoadInProgressState;
-                      if (state is RoomLoadFailureState) {
-                        return Center(
-                          child: Text('Lay thong tin phong that bai'),
-                        );
-                      }
-                      if (state is RoomLoadSuccessState) {
-                        _list = state.rooms;
-                      }
-                      var list = Expanded(
-                        child: Stack(
-                          children: <Widget>[
-                            Container(
-                              child: ListView.builder(
-                                  itemCount: _list?.length ?? 0,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return InkWell(
-                                      highlightColor: Colors.lightBlueAccent,
-                                      radius: 0,
-                                      onLongPress: () {
-                                        showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return Dialog(
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10)),
-                                                backgroundColor:
-                                                    Colors.transparent,
-                                                child: Container(
-                                                    color: Colors.white,
-                                                    padding: EdgeInsets.all(8),
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            2 /
-                                                            3,
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            1 /
-                                                            3,
-                                                    child: _dialogContentBaseOnUsername(username: widget.username, listIndex: index)),
-                                              );
-                                            });
-                                      },
-                                      child: _listItemContent(
-                                          id: _list[index].id,
-                                          roomName: _list[index].name,
-                                          officerList:
-                                              _list[index].officerList),
-                                    );
+                child: Column(
+                  children: <Widget>[
+                    widget.username == 'tp'
+                        ? Column(
+                            children: <Widget>[
+                              textField(
+                                  title: 'Ma phong ban',
+                                  controller: idController,
+                                  onChange: (val) {
+                                    _bloc.changeMpb(val);
                                   }),
-                            ),
-                            Visibility(
-                              child: Center(child: CircularProgressIndicator()),
-                              visible: isLoading,
-                            )
-                          ],
-                        ),
-                      );
+                              textField(
+                                  title: 'Ten phong ban',
+                                  controller: roomNameController,
+                                  onChange: _bloc.changeTpb),
+                              StreamBuilder(
+                                builder: (_, data) {
+                                  var isShow = data.data ?? false;
+                                  print('is show data $data');
+                                  print('is show data ${data.data}');
+                                  return isShow
+                                      ? RaisedButton(
+                                          color: Colors.lightBlue,
+                                          onPressed: () {
+                                            print('bloc: $_bloc');
+                                            _bloc.add(RoomAddedEvent(Room(
+                                                id: idController.text,
+                                                name: roomNameController.text)));
+                                            idController.clear();
+                                            roomNameController.clear();
+                                            _bloc.changeMpb("");
+                                            _bloc.changeTpb("");
+                                            FocusScope.of(context).unfocus();
+                                          },
+                                          child: Text('Luu phong ban'),
+                                        )
+                                      : RaisedButton(
+                                          onPressed: () {},
+                                          child: Text('Luu phong ban'),
+                                        );
+                                },
+                                initialData: false,
+                                stream: _bloc.validInput,
+                              ),
+                              SizedBox(height: 8),
+                            ],
+                          )
+                        : Container(),
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text('Danh sach phong ban'),
+                        ],
+                      ),
+                      decoration: BoxDecoration(color: Colors.green),
+                    ),
+                    BlocBuilder(
+                      bloc: _bloc,
+                      builder: (context, state) {
+                        var isLoading = state is RoomLoadInProgressState;
+                        if (state is RoomLoadFailureState) {
+                          return Center(
+                            child: Text('Lay thong tin phong that bai'),
+                          );
+                        }
+                        if (state is RoomLoadSuccessState) {
+                          _list = state.rooms;
+                        }
+                        var list = Expanded(
+                          child: Stack(
+                            children: <Widget>[
+                              Container(
+                                child: ListView.builder(
+                                    itemCount: _list?.length ?? 0,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return InkWell(
+                                        highlightColor: Colors.lightBlueAccent,
+                                        radius: 0,
+                                        onLongPress: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return Dialog(
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10)),
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  child: Container(
+                                                      color: Colors.white,
+                                                      padding: EdgeInsets.all(8),
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              2 /
+                                                              3,
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height *
+                                                              1 /
+                                                              3,
+                                                      child: _dialogContentBaseOnUsername(username: widget.username, listIndex: index)),
+                                                );
+                                              });
+                                        },
+                                        child: _listItemContent(
+                                            id: _list[index].id,
+                                            roomName: _list[index].name,
+                                            officerList:
+                                                _list[index].officerList),
+                                      );
+                                    }),
+                              ),
+                              Visibility(
+                                child: Center(child: CircularProgressIndicator()),
+                                visible: isLoading,
+                              )
+                            ],
+                          ),
+                        );
 
-                      return _list != null
-                          ? _list.length > 0 ? list : Container()
-                          : Container();
-                    },
-                  ),
-                ],
+                        return _list != null
+                            ? _list.length > 0 ? list : Container()
+                            : Container();
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
+          ) // This trailing comma makes auto-formatting nicer for build methods.
           ),
-        ) // This trailing comma makes auto-formatting nicer for build methods.
-        );
+    );
   }
 
   _listItemContent({String id, String roomName, List<Officer> officerList}) {

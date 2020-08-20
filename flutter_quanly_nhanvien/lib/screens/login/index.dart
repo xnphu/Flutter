@@ -83,26 +83,27 @@ class _LoginScreenState extends State<LoginScreen> {
                           initialData: false,
                           stream: _loginBloc.validInput,
                           builder: (_, data) {
-                            var isShow = data.data ?? false;
-                            return isShow
+                            var isShowLoginButton = data.data ?? false;
+                            return isShowLoginButton
                                 ? RaisedButton(
                                     color: Colors.lightBlue,
                                     onPressed: () async {
                                       _loginBloc.add(LoginPressEvent());
                                       await Future.delayed(
                                           Duration(seconds: 2));
+                                      String _username = usernameController.text;
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) => MyHomePage(
                                                     username:
-                                                        usernameController.text,
+                                                        _username,
                                                   )));
 
-//                                      usernameController.clear();
-//                                      passwordController.clear();
-//                                      _loginBloc.changeUsername('');
-//                                      _loginBloc.changePassword('');
+                                      usernameController.clear();
+                                      passwordController.clear();
+                                      _loginBloc.changeUsername('');
+                                      _loginBloc.changePassword('');
                                       FocusScope.of(context).unfocus();
                                       print('isLoading $isLoading');
                                     },

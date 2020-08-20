@@ -18,6 +18,8 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
     _tpb.close();
     _tnv.close();
     _mnv.close();
+
+    print('aaaaaaa');
   }
 
   Stream<String> get mpbStream => _mpb.stream;
@@ -36,13 +38,16 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
 
   Function(String) get changeTnv => _tnv.sink.add;
 
-  Stream<bool> get validInput => Rx.combineLatest2(mpbStream, tpbStream,
-      (a, b) => a.toString().isNotEmpty && b.toString().isNotEmpty);
+  Stream<bool> validInput;
 
-  Stream<bool> get validAddOfficerInput => Rx.combineLatest2(mnvStream,
-      tnvStream, (c, d) => c.toString().isNotEmpty && d.toString().isNotEmpty);
+  Stream<bool> validAddOfficerInput;
 
-  RoomBloc() : super(RoomInitialState());
+  RoomBloc() : super(RoomInitialState()) {
+    validInput = Rx.combineLatest2(mpbStream, tpbStream,
+        (a, b) => a.toString().isNotEmpty && b.toString().isNotEmpty);
+    validAddOfficerInput = Rx.combineLatest2(mnvStream, tnvStream,
+        (c, d) => c.toString().isNotEmpty && d.toString().isNotEmpty);
+  }
 
   @override
   Stream<RoomState> mapEventToState(RoomEvent event) async* {
@@ -144,8 +149,8 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
     if (event is SetTruongPhongEvent) {
       List<Officer> _officerList = rooms[event.roomIndex].officerList;
       //chuyen truong phong truoc ve nhan vien
-      _officerList.asMap().forEach((index,officer) {
-        if(officer.position==Position.TruongPhong) {
+      _officerList.asMap().forEach((index, officer) {
+        if (officer.position == Position.TruongPhong) {
           Officer temp = officer.copyWith(position: Position.NhanVien);
           _officerList[index] = temp;
         }
@@ -159,7 +164,7 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
 
     if (event is SetPhoPhongEvent) {
       List<Officer> _officerList = rooms[event.roomIndex].officerList;
-      if (event.isSelected ==true) {
+      if (event.isSelected == true) {
         print('position ${_officerList[event.officerIndex].position}');
         Officer officerTemp = _officerList[event.officerIndex]
             .copyWith(position: Position.PhoPhong);
