@@ -26,28 +26,30 @@ class Validators {
   });
 
   final validatePassword = StreamTransformer<String, String>.fromHandlers(
-      handleData: (password, sink) {
-    RegExp regex = new RegExp(passwordRegex);
-    if (regex.hasMatch(password)) {
-      print('password valid');
-      sink.add(password);
-    } else {
-      print('password error');
-      sink.addError('Password must be at least 8 characters');
-    }
-  });
+//      handleData: (password, sink) {
+//    RegExp regex = new RegExp(passwordRegex);
+//    if (regex.hasMatch(password)) {
+//      print('password valid');
+//      sink.add(password);
+//    } else {
+//      print('password error');
+//      sink.addError('Password must be at least 8 characters');
+//    }
+//  }
+  );
 
   final validateUsername = StreamTransformer<String, String>.fromHandlers(
-      handleData: (username, sink) {
-    RegExp regex = new RegExp(userNameRegex);
-    if (regex.hasMatch(username)) {
-      print('username valid');
-      sink.add(username);
-    } else {
-      print('username error');
-      sink.addError('Username not valid');
-    }
-  });
+//      handleData: (username, sink) {
+//    RegExp regex = new RegExp(userNameRegex);
+//    if (regex.hasMatch(username)) {
+//      print('username valid');
+//      sink.add(username);
+//    } else {
+//      print('username error');
+//      sink.addError('Username not valid');
+//    }
+//  }
+  );
 
   final validOnlyNumber =
       StreamTransformer<String, String>.fromHandlers(handleData: (input, sink) {

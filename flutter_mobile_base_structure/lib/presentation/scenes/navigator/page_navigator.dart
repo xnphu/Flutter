@@ -3,6 +3,8 @@ import 'package:flutter_mobile_base_structure/core/utils/stack.dart';
 import 'package:flutter_mobile_base_structure/presentation/utils/app_sate.dart';
 import 'observer_route.dart';
 
+PageNavigator navigator = PageNavigator(initTag: AppState.launch);
+
 class PageNavigator {
   final StackData<AppState> _stackOfState = StackData();
   PageNavigator({AppState initTag}) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobile_base_structure/presentation/base/base_bloc.dart';
 import 'package:flutter_mobile_base_structure/presentation/base/base_page.dart';
+import 'package:flutter_mobile_base_structure/presentation/scenes/home/index.dart';
 import 'package:flutter_mobile_base_structure/presentation/widgets/index.dart';
 
 import 'login_bloc.dart';
@@ -120,7 +121,9 @@ class LoginPageState extends BasePageState<LoginBloc, LoginPage, LoginRouter>
                         backgroundColor: AppColors.white,
                         onPressed: () {
                           hideKeyboard(context);
-                          _bloc.add(OnRequestLogInEvent());
+//                          _bloc.add(OnRequestLogInEvent());
+                          navigator.materialPush(
+                              context: context, page: HomePage(username: 'tp',));
                         },
                         title: AppLocalizations.of(context).loginButton,
                         textStyle: titleStyle,
