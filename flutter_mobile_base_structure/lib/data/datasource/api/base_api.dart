@@ -20,18 +20,18 @@ abstract class BaseApi {
     return header;
   }
 
-  Future<String> validateAccessToken(AuthenCache authenCache) async {
-    final token = (await authenCache.getCachedToken()).token;
-    if (token.isEmpty) {
-      throw CacheException(errorMessage: TOKEN_EMPTY_ERROR);
-    }
-    return token;
-  }
+//  Future<String> validateAccessToken(AuthenCache authenCache) async {
+//    final token = (await authenCache.getCachedToken()).token;
+//    if (token.isEmpty) {
+//      throw CacheException(errorMessage: TOKEN_EMPTY_ERROR);
+//    }
+//    return token;
+//  }
 
-  Future<Map<String, String>> buildHeader({AuthenCache authenCache}) async {
-    if (authenCache == null) return defaultHeader();
-    final token = await validateAccessToken(authenCache);
-    var header = defaultHeader(token: token);
-    return header;
-  }
+//  Future<Map<String, String>> buildHeader({AuthenCache authenCache}) async {
+//    if (authenCache == null) return defaultHeader();
+//    final token = await validateAccessToken(authenCache);
+//    var header = defaultHeader(token: token);
+//    return header;
+//  }
 }

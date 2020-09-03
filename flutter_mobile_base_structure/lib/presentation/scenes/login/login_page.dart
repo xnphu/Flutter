@@ -65,7 +65,7 @@ class LoginPageState extends BasePageState<LoginBloc, LoginPage, LoginRouter>
                 children: <Widget>[
                   _buildLogo(),
                   buildInputRow(
-                      onChanged: _bloc.changeUsername,
+                      onChanged: _bloc.changeEmail,
                       icon: AppImages.iconUsername,
                       tintText: AppLocalizations.of(context).inputUsername,
                       node: _nodeUsername),
@@ -121,8 +121,9 @@ class LoginPageState extends BasePageState<LoginBloc, LoginPage, LoginRouter>
                         backgroundColor: AppColors.white,
                         onPressed: () {
                           hideKeyboard(context);
-//                          _bloc.add(OnRequestLogInEvent());
-                          navigator.materialPush(
+                          _bloc.add(OnRequestLogInEvent());
+                          print('token view ${_bloc.token}');
+                          navigator.materialPushAndRemoveAll(
                               context: context, page: HomePage(username: 'tp',));
                         },
                         title: AppLocalizations.of(context).loginButton,

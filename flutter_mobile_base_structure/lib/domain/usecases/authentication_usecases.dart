@@ -17,7 +17,7 @@ class AuthenticationUseCaseImpl extends AuthenticationUseCases {
     assert(username.isNotEmpty);
     assert(password.isNotEmpty);
     try {
-      await authenRepo.login(username, password);
+//      await authenRepo.login(username, password);
 
       return Right(true);
     } on RemoteException catch (ex) {

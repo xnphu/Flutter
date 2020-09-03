@@ -20,7 +20,12 @@ class ApplicationBloc extends BaseBloc<ApplicationEvent, ApplicationState> {
   Stream<ApplicationState> mapEventToState(BaseEvent event) async* {
     if (event is AppLaunched) {
       await Future.delayed(Duration(seconds: 2));
-      yield AppLaunchReadyState(isTokenAlive: true);
+      String token = await repository.getCachedToken();
+      print('tokennnnnnnn $token');
+      if (token == null) {
+        yield AppLaunchReadyState(isTokenAlive: false);
+      } else
+        yield AppLaunchReadyState(isTokenAlive: true);
     } else {
       yield AppLaunchLoadProfileState();
     }

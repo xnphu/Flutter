@@ -10,12 +10,12 @@ class AuthenApiImpl extends AuthenApi with BaseApi {
   NetworkStatus networkStatus;
   AuthenApiImpl({this.networkStatus});
 
-  @override
-  Future<TokenEntity> login(String username, String password) async {
-    var params = {'ten_truy_cap': username, 'mat_khau': password};
-    var header = await buildHeader();
-    final json = await ApiConnection(apiCofig, networkStatus: networkStatus)
-        .execute(new ApiInput('/auth/signin', ApiMethod.post, header, params));
-    return TokenEntity.fromJson(json);
-  }
+//  @override
+//  Future<TokenEntity> login(String username, String password) async {
+//    var params = {'ten_truy_cap': username, 'mat_khau': password};
+//    var header = await buildHeader();
+//    final json = await ApiConnection(apiCofig, networkStatus: networkStatus)
+//        .execute(new ApiInput('/auth/signin', ApiMethod.post, header, params));
+//    return TokenEntity.fromJson(json);
+//  }
 }

@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_mobile_base_structure/domain/model/index.dart';
+import 'package:flutter_mobile_base_structure/domain/repository/authen_repository.dart';
 import 'package:flutter_mobile_base_structure/domain/repository/room_repository.dart';
 import 'package:flutter_mobile_base_structure/presentation/base/base_bloc.dart';
 
@@ -7,6 +9,7 @@ import 'home_state.dart';
 
 class HomeBloc extends BaseBloc<BaseEvent, BaseState> with Validators {
   RoomRepository roomRepository;
+  AuthenticationRepository authenticationRepository;
   String roomChoice = '';
   final _mpb = BehaviorSubject<String>();
   final _tpb = BehaviorSubject<String>();
@@ -38,7 +41,7 @@ class HomeBloc extends BaseBloc<BaseEvent, BaseState> with Validators {
   Stream<bool> get validAddOfficerInput => Rx.combineLatest2(mnvStream,
       tnvStream, (c, d) => c.toString().isNotEmpty && d.toString().isNotEmpty);
 
-  HomeBloc(this.roomRepository) : super();
+  HomeBloc(this.roomRepository, this.authenticationRepository) : super();
 
   @override
   void dispose() {
@@ -61,7 +64,7 @@ class HomeBloc extends BaseBloc<BaseEvent, BaseState> with Validators {
   @override
   Stream<BaseState> mapEventToState(BaseEvent event) async* {
     if (event is HomeInitialEvent) {
-      List <Room> rooms = await roomRepository.getAllRooms();
+      List<Room> rooms = await roomRepository.getAllRooms();
       yield HomeLoadSuccessState(rooms: rooms);
     }
     if (event is AddRoomEvent) {
@@ -82,6 +85,10 @@ class HomeBloc extends BaseBloc<BaseEvent, BaseState> with Validators {
       List<Room> rooms = await roomRepository.addOfficerToRoom(
           roomIndex: event.roomIndex, officer: event.officer);
       yield HomeLoadSuccessState(rooms: rooms);
+    }
+
+    if (event is LogOutEvent){
+      await authenticationRepository.logOut();
     }
   }
 }

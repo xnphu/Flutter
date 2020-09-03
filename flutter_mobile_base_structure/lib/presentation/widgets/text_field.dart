@@ -13,6 +13,7 @@ textField(
       onChanged: onChange,
       enabled: isEnable,
       obscureText: isObscureText != null ? true : false,
+      autofocus: false,
       decoration: InputDecoration(
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           labelText: '$title'),

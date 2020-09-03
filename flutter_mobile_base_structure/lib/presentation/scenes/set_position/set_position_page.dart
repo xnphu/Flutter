@@ -5,11 +5,13 @@ import 'package:flutter_mobile_base_structure/presentation/base/base_event.dart'
 import 'package:flutter_mobile_base_structure/presentation/base/base_page.dart';
 import 'package:flutter_mobile_base_structure/presentation/base/base_page_mixin.dart';
 import 'package:flutter_mobile_base_structure/presentation/base/base_state.dart';
-import 'package:flutter_mobile_base_structure/presentation/scenes/detail_room/detail_room_bloc.dart';
-import 'package:flutter_mobile_base_structure/presentation/scenes/detail_room/detail_room_router.dart';
 import 'package:flutter_mobile_base_structure/presentation/scenes/set_position/index.dart';
 
 class SetPositionPage extends BasePage {
+  final int roomIndex;
+
+  SetPositionPage({this.roomIndex});
+
   @override
   _SetPositionPageState createState() => _SetPositionPageState();
 }
@@ -23,6 +25,13 @@ class _SetPositionPageState
   List<bool> checkBoxValue = [];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _roomIndex = widget.roomIndex;
+  }
+
+  @override
   Widget buildBody(BuildContext context, BaseBloc<BaseEvent, BaseState> bloc) {
     // TODO: implement buildBody
     return _buildDetailRoomPage(context, bloc);
@@ -30,58 +39,64 @@ class _SetPositionPageState
 
   _buildDetailRoomPage(BuildContext context, SetPositionBloc bloc) {
     _bloc = bloc;
-    List _officerList = [];
-    return Scaffold(
-      body: SafeArea(
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              _header(title: 'Chon truong phong'),
-              BlocBuilder(
-                bloc: _bloc,
-                builder: (context, state) {
-//                  if (state is SetPositionScreenLoadSuccessState) {
-//                    _officerList = state.officers;
-//                    _setRadioValue();
-//                  }
-                  var list = Expanded(
-                    child: ListView.builder(
-                        itemCount: _officerList?.length ?? 0,
-                        itemBuilder: (BuildContext context, index) {
-                          return _listTruongPhongContent(
+    _bloc.add(SetPositionInitialEvent(roomIndex: _roomIndex));
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.pop(context);
+        return;
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: Container(
+            child: Column(
+              children: <Widget>[
+                _header(title: 'Chon truong phong'),
+                BlocBuilder(
+                  bloc: _bloc,
+                  builder: (context, state) {
+                    if (state is SetPositionLoadSuccessState) {
+                      _officerList = state.officers;
+                      _setRadioValue();
+                    }
+                    var list = Expanded(
+                      child: ListView.builder(
+                          itemCount: _officerList?.length ?? 0,
+                          itemBuilder: (BuildContext context, index) {
+                            return _listTruongPhongContent(
+                                id: _officerList[index].id,
+                                name: _officerList[index].name,
+                                position: _officerList[index].position,
+                                index: index);
+                          }),
+                    );
+                    return list;
+                  },
+                ),
+                _header(title: 'Chon pho phong'),
+                BlocBuilder(
+                  bloc: _bloc,
+                  builder: (context, state) {
+                    if (state is SetPositionLoadSuccessState) {
+                      _officerList = state.officers;
+                      _setRadioValue();
+                    }
+                    var list = Expanded(
+                      child: ListView.builder(
+                          itemCount: _officerList?.length ?? 0,
+                          itemBuilder: (BuildContext context, index) {
+                            return _listPhoPhongContent(
                               id: _officerList[index].id,
                               name: _officerList[index].name,
                               position: _officerList[index].position,
-                              index: index);
-                        }),
-                  );
-                  return list;
-                },
-              ),
-              _header(title: 'Chon pho phong'),
-              BlocBuilder(
-                bloc: _bloc,
-                builder: (context, state) {
-//                  if (state is SetPositionScreenLoadSuccessState) {
-//                    _officerList = state.officers;
-//                    _setRadioValue();
-//                  }
-                  var list = Expanded(
-                    child: ListView.builder(
-                        itemCount: _officerList?.length ?? 0,
-                        itemBuilder: (BuildContext context, index) {
-                          return _listPhoPhongContent(
-                            id: _officerList[index].id,
-                            name: _officerList[index].name,
-                            position: _officerList[index].position,
-                            index: index,
-                          );
-                        }),
-                  );
-                  return list;
-                },
-              ),
-            ],
+                              index: index,
+                            );
+                          }),
+                    );
+                    return list;
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -133,9 +148,10 @@ class _SetPositionPageState
           onChanged: (value) {
             setState(() {
               _truongPhongID = value;
+              print('tp id $_truongPhongID');
             });
-//            _roomBloc.add(SetTruongPhongEvent(
-//                roomIndex: _roomIndex, officerIndex: index));
+            _bloc.add(SetTruongPhongEvent(
+                roomIndex: _roomIndex, officerIndex: index));
           },
         ),
       ],
@@ -178,8 +194,8 @@ class _SetPositionPageState
                 _truongPhongID = '';
               }
             });
-//            _roomBloc.add(SetPhoPhongEvent(
-//                roomIndex: _roomIndex, officerIndex: index, isSelected: value));
+            _bloc.add(SetPhoPhongEvent(
+                roomIndex: _roomIndex, officerIndex: index, isSelected: value));
           },
         ),
       ],

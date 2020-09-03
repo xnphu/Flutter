@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "90509852600",
+    "firebase_url": "https://quan-ly-nhan-vien-376c3.firebaseio.com",
+    "project_id": "quan-ly-nhan-vien-376c3",
+    "storage_bucket": "quan-ly-nhan-vien-376c3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:90509852600:android:60cbeead2cc0f2df22994d",
+        "android_client_info": {
+          "package_name": "com.example.flutter_mobile_base_structure"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "90509852600-obqc4eto7q9ko44k4qf475aea8ggt6ov.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7RjmcabUqD1rkcOsB1yxDu-YloiZxtww"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "90509852600-obqc4eto7q9ko44k4qf475aea8ggt6ov.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

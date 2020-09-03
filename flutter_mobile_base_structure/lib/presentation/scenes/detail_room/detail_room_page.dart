@@ -27,10 +27,13 @@ class DetailRoomPage extends BasePage {
 class DetailRoomPageState
     extends BasePageState<DetailRoomBloc, DetailRoomPage, DetailRoomRouter> {
   DetailRoomBloc _bloc;
+  List<Officer> _officerList = [];
+  int _roomIndex;
 
   @override
   void initState() {
     super.initState();
+    _roomIndex = widget.roomIndex;
   }
 
   @override
@@ -44,7 +47,7 @@ class DetailRoomPageState
     double screenHeight = MediaQuery.of(context).size.height;
     _bloc = bloc;
     _bloc.add(DetailRoomInitialEvent(index: widget.roomIndex));
-    List _officerList = [];
+//    List _officerList = [];
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -282,13 +285,12 @@ class DetailRoomPageState
   }) async{
     //hide dialog
     Navigator.pop(context);
-    navigator.materialPush(context: context, page: ChangeRoomPage());
-//    var listBack = await Navigator.push(
-//        context, MaterialPageRoute(builder: (context) => ChangeRoomScreen(
-//      officer: _officerList[index],
-//      roomIndex: _roomIndex,
-//    )));
-//    print('listBack $listBack');
-//    _detailRoomBloc.add(ChangeRoomSuccessEvent(officers: listBack));
+    var roomIndexBack = await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => ChangeRoomPage(
+      officer: _officerList[index],
+      roomIndex: _roomIndex,
+    )));
+    print('roomIndexBack $roomIndexBack');
+    _bloc.add(DetailRoomInitialEvent(index: roomIndexBack));
   }
 }

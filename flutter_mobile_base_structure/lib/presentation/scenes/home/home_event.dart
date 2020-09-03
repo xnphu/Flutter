@@ -25,3 +25,5 @@ class AddOfficerToRoomEvent extends BaseEvent {
 }
 
 class HomeLoadFailureEvent extends BaseEvent {}
+
+class LogOutEvent extends BaseEvent {}

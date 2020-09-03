@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_mobile_base_structure/domain/model/index.dart';
+import 'package:flutter_mobile_base_structure/presentation/app/application_bloc.dart';
 import 'package:flutter_mobile_base_structure/presentation/base/base_bloc.dart';
 import 'package:flutter_mobile_base_structure/presentation/base/base_event.dart';
 import 'package:flutter_mobile_base_structure/presentation/base/base_page.dart';
+import 'package:flutter_mobile_base_structure/presentation/base/base_page_mixin.dart';
 import 'package:flutter_mobile_base_structure/presentation/base/base_state.dart';
 import 'package:flutter_mobile_base_structure/presentation/scenes/detail_room/detail_room_page.dart';
 import 'package:flutter_mobile_base_structure/presentation/scenes/home/home_router.dart';
 import 'package:flutter_mobile_base_structure/presentation/scenes/home/index.dart';
+import 'package:flutter_mobile_base_structure/presentation/scenes/login/index.dart';
+import 'package:flutter_mobile_base_structure/presentation/scenes/set_position/index.dart';
 import 'package:flutter_mobile_base_structure/presentation/widgets/add_officer_dialog_content.dart';
 import 'package:flutter_mobile_base_structure/presentation/widgets/dialog_content.dart';
-import 'package:flutter_mobile_base_structure/presentation/widgets/input_text_field.dart';
 import 'package:flutter_mobile_base_structure/presentation/widgets/text_field.dart';
 
 class HomePage extends BasePage {
@@ -41,6 +44,7 @@ class _HomePageState extends BasePageState<HomeBloc, HomePage, HomeRouter> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    bloc.add(HomeInitialEvent());
     _username = widget.username;
   }
 
@@ -52,7 +56,7 @@ class _HomePageState extends BasePageState<HomeBloc, HomePage, HomeRouter> {
 
   _buildHomePage(BuildContext context, HomeBloc bloc) {
     _bloc = bloc;
-    _bloc.add(HomeInitialEvent());
+//    _bloc.add(HomeInitialEvent());
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -66,6 +70,24 @@ class _HomePageState extends BasePageState<HomeBloc, HomePage, HomeRouter> {
 //          ),
           child: Column(
             children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        _bloc.add(LogOutEvent());
+                        navigator.materialPushAndRemoveAll(context: context, page: LoginPage());
+                      },
+                      child: Text('Dang xuat',
+                      style: TextStyle(
+                       color: Colors.red
+                      )),
+                    ),
+                  ],
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: buildHeader(
@@ -343,35 +365,30 @@ class _HomePageState extends BasePageState<HomeBloc, HomePage, HomeRouter> {
   }
 
   _onTapShowOfficerList({BuildContext context, int index}) async {
-//    Navigator.pop(context);
-//    List<Officer> listBack = await Navigator.push(
-//        context,
-//        MaterialPageRoute(
-//            builder: (context) => RoomDetail(
-//              roomIndex: index,
-//              officerList: _list[index].officerList,
-//            )));
-//    print('list back $listBack');
-//    if (listBack != null) {
-//      _bloc.add(RoomModifyEvent(roomIndex: index, officerNewList: listBack));
-//    }
     Navigator.pop(context);
-    print('index $index');
-    navigator.materialPush(
-        context: context,
-        page: DetailRoomPage(
-          roomIndex: index,
-        ));
+    List<Officer> listBack = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => DetailRoomPage(
+              roomIndex: index,
+            )));
+    print('listBack $listBack');
+    if(listBack==null) {
+      _bloc.add(HomeInitialEvent());
+    }
   }
 
   _onTapSetPosition({BuildContext context, int index}) async {
-//    Navigator.pop(context);
-//    Navigator.push(
-//        context,
-//        MaterialPageRoute(
-//            builder: (context) => SetPositionScreen(
-//              roomIndex: index,
-//            )));
+    Navigator.pop(context);
+    var resultBack = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => SetPositionPage(
+              roomIndex: index,
+            )));
+    if(resultBack==null) {
+      _bloc.add(HomeInitialEvent());
+    }
   }
 
   _dialogContentBaseOnUsername({String username, int listIndex}) {
