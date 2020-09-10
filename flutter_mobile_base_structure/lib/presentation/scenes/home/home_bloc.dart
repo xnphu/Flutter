@@ -87,7 +87,7 @@ class HomeBloc extends BaseBloc<BaseEvent, BaseState> with Validators {
       yield HomeLoadSuccessState(rooms: rooms);
     }
 
-    if (event is LogOutEvent){
+    if (event is LogOutEvent) {
       await authenticationRepository.logOut();
     }
   }

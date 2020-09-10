@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class RoomRepositoryImpl implements RoomRepository {
   final List<Room> rooms = [];
   CollectionReference roomsCollection = Firestore.instance.collection('rooms');
-
+  var docId;
   static RoomRepositoryImpl _instance;
 
   RoomRepositoryImpl getInstance() {
@@ -29,16 +29,25 @@ class RoomRepositoryImpl implements RoomRepository {
   @override
   Future<List<Room>> addRoom({Room room}) async {
     rooms.add(room);
-    roomsCollection
+    await roomsCollection
         .add(
             {'id': room.id, 'name': room.name, 'officerList': room.officerList})
-        .then((value) => print('room added'))
+        .then((value) => print('room added id ${value.documentID}'))
         .catchError((err) => print('err $err'));
     return rooms;
   }
 
   @override
   Future<List<Room>> deleteRoomByIndex({int index}) async {
+    await roomsCollection
+        .where('id', isEqualTo: rooms[index].id)
+        .getDocuments()
+        .then((QuerySnapshot querySnapshot) => {
+              querySnapshot.documents.forEach((doc) {
+                docId = doc.documentID;
+              })
+            });
+    await roomsCollection.document(docId).delete();
     rooms.removeAt(index);
     return rooms;
   }

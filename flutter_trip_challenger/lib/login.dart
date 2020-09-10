@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_trip_challenger/custom_paint_page.dart';
 import 'package:flutter_trip_challenger/home.dart';
 import 'package:flutter_trip_challenger/register.dart';
 import 'package:flutter_trip_challenger/utils/hex_color.dart';
@@ -177,6 +178,17 @@ class _LoginPageState extends State<LoginPage> {
                   },
                   child: button(context: context, text: 'Register'),
                 ),
+                InkWell(
+                  highlightColor: Colors.white,
+                  radius: 0,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CustomPaintPage()),
+                    );
+                  },
+                  child: button(context: context, text: 'Vẽ hình'),
+                )
               ],
             ),
           ),

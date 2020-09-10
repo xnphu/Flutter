@@ -355,7 +355,6 @@ class _HomePageState extends BasePageState<HomeBloc, HomePage, HomeRouter> {
             changeMnv: changeMnv,
             changeTnv: changeTnv,
             addOfficerToRoomEvent: (officer) {
-              print('officer $officer');
               _bloc.add(
                   AddOfficerToRoomEvent(roomIndex: index, officer: officer));
             },
