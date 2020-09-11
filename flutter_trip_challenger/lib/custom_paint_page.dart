@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_trip_challenger/utils/hex_color.dart';
+import 'dart:io' show Platform;
 
 class CustomPaintPage extends StatefulWidget {
   @override
@@ -26,9 +27,39 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          child: CustomPaint(
-            painter: CustomCircle(datas: listData),
-            child: Container(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Icon(Icons.arrow_back_ios)),
+                    Text(
+                      'Draw chart',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    SizedBox(width: 10)
+                  ],
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomPaint(
+                    painter: CustomCircle(datas: listData),
+                    child: Container(),
+                  ),
+                ],
+              ),
+              SizedBox(height: 50),
+            ],
           ),
         ),
       ),
@@ -45,7 +76,9 @@ class CustomCircle extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final textBoldStyle = TextStyle(
-        color: HexColor('#696969'), fontSize: 15, fontWeight: FontWeight.w500);
+        color: HexColor('#696969'),
+        fontSize: Platform.isAndroid ? 15 : 14,
+        fontWeight: FontWeight.w500);
     Offset center = Offset(0, 0);
     var rect = Rect.fromCircle(center: center, radius: 100);
 
